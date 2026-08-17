@@ -541,10 +541,11 @@ window.__ModuleLoader__.load({
   overflow: visible;
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.12));
 }
-.dsh-cat-poop--show { animation: dsh-cat-poop-drop 0.5s ease-out forwards; }
+.dsh-cat-poop--show { animation: dsh-cat-poop-drop 0.8s ease-out forwards; }
 @keyframes dsh-cat-poop-drop {
   0% { opacity: 0; transform: translateY(-10px) scale(0.3) rotate(-12deg); }
-  55% { opacity: 1; transform: translateY(2px) scale(1.1) rotate(4deg); }
+  40% { opacity: 1; transform: translateY(1px) scale(1.12) rotate(5deg); }
+  75% { transform: translateY(2px) scale(0.98) rotate(-2deg); }
   100% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
 }
 .dsh-cat-poop--squish { animation: dsh-cat-poop-squish 0.3s ease-in forwards; }
@@ -1107,16 +1108,18 @@ window.__ModuleLoader__.load({
 				}, rand(12000, 24000));
 			}
 			function startPoop() {
-				// squat (nap pose), then drop a poop that stays until clicked
+				// squat (nap pose) and strain for a while, then drop a poop that stays until clicked
 				state = "poop";
 				setMode("nap");
+				showBubble("嗯…", 2000);
 				clearTimeout(poopTimer);
 				poopTimer = setTimeout(() => {
+					showBubble("💩", 1200);
 					leavePoop();
 					state = "idle";
 					setMode("idle");
 					restUntil = performance.now() + rand(1200, 2400);
-				}, 900);
+				}, rand(2600, 3600));
 			}
 			function leavePoop() {
 				const el = document.createElement("div");
