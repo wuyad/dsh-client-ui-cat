@@ -527,6 +527,31 @@ window.__ModuleLoader__.load({
   0% { transform: translate(0,0) scale(0.3) rotate(0deg); opacity: 1; }
   100% { transform: translate(var(--dx), var(--dy)) scale(1.9) rotate(var(--rot)); opacity: 0; }
 }
+/* cat poop: stays until clicked or page refresh */
+.dsh-cat-poop {
+  position: fixed;
+  width: 26px; height: 22px;
+  z-index: 2147483000;
+  pointer-events: auto;
+  cursor: pointer;
+  opacity: 0;
+}
+.dsh-cat-poop svg {
+  display: block;
+  overflow: visible;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.12));
+}
+.dsh-cat-poop--show { animation: dsh-cat-poop-drop 0.5s ease-out forwards; }
+@keyframes dsh-cat-poop-drop {
+  0% { opacity: 0; transform: translateY(-10px) scale(0.3) rotate(-12deg); }
+  55% { opacity: 1; transform: translateY(2px) scale(1.1) rotate(4deg); }
+  100% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+}
+.dsh-cat-poop--squish { animation: dsh-cat-poop-squish 0.3s ease-in forwards; }
+@keyframes dsh-cat-poop-squish {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.2) rotate(30deg); }
+}
 `;
 		// Visual cat size (the asset's 60x42 canvas).
 		const CAT_W = 60;
@@ -602,7 +627,7 @@ window.__ModuleLoader__.load({
 			let tx = 60;
 			let ty = 70;
 			let speed = 70;
-			let state = "idle"; // idle | edge | ground | hop | cliff | fall | hurt | recover | nap | pet | teleport
+			let state = "idle"; // idle | edge | ground | hop | cliff | fall | hurt | recover | nap | pet | teleport | poop
 			let ledge = null;   // current ledge {y, x1, x2}
 			let onLedge = false;
 			let edges = [];     // [{y, x1, x2}]
@@ -642,6 +667,7 @@ window.__ModuleLoader__.load({
 			let teleportTimer = 0;
 			let backing = false;    // backing up a few steps before turning around
 			let backX1 = 0;
+			let poopTimer = 0;
 			let lastTeleportCheck = performance.now() + rand(12000, 22000);
 			let idleSince = 0;
 			let dragging = false;
@@ -1079,6 +1105,37 @@ window.__ModuleLoader__.load({
 					}
 				}, rand(12000, 24000));
 			}
+			function startPoop() {
+				// squat (nap pose), then drop a poop that stays until clicked
+				state = "poop";
+				setMode("nap");
+				clearTimeout(poopTimer);
+				poopTimer = setTimeout(() => {
+					leavePoop();
+					state = "idle";
+					setMode("idle");
+					restUntil = performance.now() + rand(1200, 2400);
+				}, 900);
+			}
+			function leavePoop() {
+				const el = document.createElement("div");
+				el.className = "dsh-cat-poop";
+				el.setAttribute("aria-hidden", "true");
+				el.innerHTML =
+					'<svg viewBox="0 0 26 22" width="26" height="22"><path d="M8 6 C4 6 3 10 5.5 12 C2.5 12.5 2 16 5 18 C4 19.5 5 21 7.5 21 L18.5 21 C21 21 22 19.5 21 18 C24 16 23.5 12.5 20.5 12 C23 10 22 6 18 6 C16 2.5 13 1.5 11 3 C9.5 4 8 4.5 8 6 Z" fill="#a4703f"/><path d="M5.5 12 C2.5 12.5 2 16 5 18 C4 19.5 5 21 7.5 21 L9 21 C8 19 8.5 16.5 10 15 C8 14 6.5 13 5.5 12 Z" fill="#c9965f"/></svg>';
+				el.style.left = (x + rand(-4, 10)) + "px";
+				el.style.top = (y + CAT_H - 4) + "px";
+				document.body.appendChild(el);
+				void el.offsetWidth;
+				el.classList.add("dsh-cat-poop--show");
+				el.addEventListener("click", (ev) => {
+					ev.stopPropagation();
+					ev.preventDefault();
+					el.classList.remove("dsh-cat-poop--show");
+					el.classList.add("dsh-cat-poop--squish");
+					setTimeout(() => el.remove(), 300);
+				});
+			}
 			function startPet() {
 				if (state === "pet") return;
 				if (state === "hurt") {
@@ -1101,6 +1158,11 @@ window.__ModuleLoader__.load({
 			function decideNext(now) {
 				maybeMeow();
 				scanEdgesIfStale(true);
+				// occasionally poop where it stands (left behind until clicked)
+				if (!mustMove && Math.random() < 0.07) {
+					startPoop();
+					return;
+				}
 				// occasionally teleport somewhere else so it doesn't linger at the bottom
 				if (!mustMove && Math.random() < 0.12) {
 					startTeleport();
@@ -1370,6 +1432,7 @@ window.__ModuleLoader__.load({
 				clearTimeout(napTimer);
 				clearTimeout(sniffTimer);
 				clearTimeout(teleportTimer);
+				clearTimeout(poopTimer);
 				root.classList.remove("dsh-cat--teleport", "dsh-cat--teleport-arrive");
 				backing = false;
 				root.classList.remove("dsh-cat--backing");
@@ -1447,6 +1510,7 @@ window.__ModuleLoader__.load({
 				clearTimeout(groomTimer);
 				clearTimeout(sniffTimer);
 				clearTimeout(teleportTimer);
+				clearTimeout(poopTimer);
 				window.removeEventListener("resize", onResize);
 				window.removeEventListener("scroll", onScroll, true);
 				root.remove();

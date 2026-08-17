@@ -10,6 +10,7 @@ A little tabby cat that wanders around the **DeepSeek Harness** web UI — walki
 - 🪜 Hops up onto ledges, runs, sniffs, grooms, and **naps most of the time** (12–24s, ~75% of rests)
 - ✨ Occasionally **teleports** to a random spot on the page (with a bright swirling smoke puff) so it doesn't stay at the bottom
 - 🔄 Sometimes **backs up a few steps** before turning around at the end of a ledge
+- 💩 Occasionally **poops** where it stands — the poop stays there until you click it (or refresh the page)
 - 🏔️ Sometimes reaches the end of a ledge and falls off — gets dizzy, sees stars, grows a bump, then recovers on its own
 - ❤️ Click to pet it: pink hearts, purring, and instant recovery after a fall
 - 🎨 Right-click to cycle through **6 walking skins** (orange / white / tuxedo / black / gray / siamese)
@@ -48,6 +49,7 @@ Copy the `cat-plugin/` folder into your profile's `web/node_modules` as `dsh-cli
 | Left-click | Pet the cat (hearts + purring); also heals it after a fall |
 | Drag | Pick the cat up, then release to drop it |
 | Right-click | Cycle to the next skin (橘猫 / 白猫 / 奶牛猫 / 黑猫 / 灰猫 / 暹罗猫) |
+| Click a poop | Remove it (otherwise it stays until the page reloads) |
 
 ## Development
 
