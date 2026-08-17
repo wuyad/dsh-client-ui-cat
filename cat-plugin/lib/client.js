@@ -557,31 +557,28 @@ window.__ModuleLoader__.load({
   0% { opacity: 1; transform: scale(1); }
   100% { opacity: 0; transform: scale(0.2) rotate(30deg); }
 }
-/* after pooping: proud tail flicks, look back at it, then sniff */
-.dsh-cat--poop-done .dsh-cat-inner { transform: translateY(1px); }
+/* after pooping: proud tail flicks, look back, then sniff — one ceremony */
+.dsh-cat--poop-done .dsh-cat-inner { animation: dsh-cat-poop-ceremony 3.6s ease-in-out forwards; }
+@keyframes dsh-cat-poop-ceremony {
+  0% { transform: translateY(1px) rotate(0deg); }
+  12% { transform: translateY(1px) rotate(12deg); }
+  24% { transform: translateY(1px) rotate(0deg); }
+  100% { transform: translateY(1px) rotate(0deg); }
+}
 .dsh-cat--poop-done .wc-tail { animation: dsh-cat-tail-flick 0.42s ease-in-out infinite; }
 @keyframes dsh-cat-tail-flick {
   0%, 100% { transform: rotate(-8deg); }
   50% { transform: rotate(-52deg); }
 }
-/* look back at the result first */
-.dsh-cat--poop-turn .dsh-cat-inner { animation: dsh-cat-poop-turn 0.7s ease-in-out forwards; }
-@keyframes dsh-cat-poop-turn {
-  0% { transform: translateY(1px) rotate(0deg); }
-  100% { transform: translateY(1px) rotate(10deg); }
-}
-.dsh-cat--poop-turn .wc-head { animation: dsh-cat-poop-lookback 0.7s ease-in-out forwards; }
-@keyframes dsh-cat-poop-lookback {
+.dsh-cat--poop-done .wc-head { animation: dsh-cat-poop-look-sniff 3.6s ease-in-out forwards; }
+@keyframes dsh-cat-poop-look-sniff {
   0% { transform: rotate(42deg) translateY(2px); }
-  100% { transform: rotate(-28deg) translateY(4px); }
-}
-/* then lower the head and sniff twice */
-.dsh-cat--poop-sniff .wc-head { animation: dsh-cat-poop-sniff 1.15s ease-in-out 2; }
-@keyframes dsh-cat-poop-sniff {
-  0%, 100% { transform: rotate(42deg) translateY(2px); }
-  25% { transform: rotate(56deg) translateY(5px); }
-  50% { transform: rotate(44deg) translateY(2px); }
-  75% { transform: rotate(53deg) translateY(4px); }
+  15% { transform: rotate(-46deg) translateY(4px); }
+  28% { transform: rotate(42deg) translateY(2px); }
+  44% { transform: rotate(57deg) translateY(5px); }
+  58% { transform: rotate(44deg) translateY(2px); }
+  72% { transform: rotate(53deg) translateY(4px); }
+  100% { transform: rotate(42deg) translateY(2px); }
 }
 `;
 		// Visual cat size (the asset's 60x42 canvas).
@@ -759,8 +756,7 @@ window.__ModuleLoader__.load({
 				"dsh-cat--hurt", "dsh-cat--recover", "dsh-cat--petted", "dsh-cat--nap",
 				"dsh-cat--drag", "dsh-cat--groom", "dsh-cat--groom-scratch", "dsh-cat--groom-lick",
 				"dsh-cat--cliff", "dsh-cat--sniff", "dsh-cat--run", "dsh-cat--jump",
-				"dsh-cat--teleport", "dsh-cat--teleport-arrive", "dsh-cat--poop-done",
-				"dsh-cat--poop-turn", "dsh-cat--poop-sniff"
+				"dsh-cat--teleport", "dsh-cat--teleport-arrive", "dsh-cat--poop-done"
 			];
 			function setMode(stateName) {
 				for (const c of STATE_CLASSES) root.classList.remove(c);
@@ -1150,21 +1146,15 @@ window.__ModuleLoader__.load({
 				poopTimer = setTimeout(() => {
 					showBubble("💩", 1200);
 					leavePoop();
-					// look back at the result, then sniff it before moving on
+					// look back, then sniff — one continuous ceremony (CSS, 3.6s)
 					state = "poop-done";
 					setMode("poop-done");
-					root.classList.add("dsh-cat--poop-turn");
 					poopTimer = setTimeout(() => {
-						root.classList.remove("dsh-cat--poop-turn");
-						root.classList.add("dsh-cat--poop-sniff");
-						poopTimer = setTimeout(() => {
-							root.classList.remove("dsh-cat--poop-sniff");
-							state = "idle";
-							setMode("idle");
-							restUntil = performance.now() + rand(1200, 2400);
-							poopCooldownUntil = performance.now() + rand(30000, 50000);
-						}, rand(2400, 3000));
-					}, 700);
+						state = "idle";
+						setMode("idle");
+						restUntil = performance.now() + rand(1200, 2400);
+						poopCooldownUntil = performance.now() + rand(30000, 50000);
+					}, 3700);
 				}, rand(3400, 4600));
 			}
 			function leavePoop() {
@@ -1177,10 +1167,10 @@ window.__ModuleLoader__.load({
 				const rect = root.getBoundingClientRect();
 				const facingLeft = root.classList.contains("dsh-cat--face-left");
 				const rearX = facingLeft
-					? rect.right - rand(4, 14)
-					: rect.left + rand(4, 14);
+					? rect.right - 10
+					: rect.left + 10;
 				el.style.left = rearX + "px";
-				el.style.top = (rect.bottom - 10) + "px";
+				el.style.top = (rect.bottom - 8) + "px";
 				document.body.appendChild(el);
 				void el.offsetWidth;
 				el.classList.add("dsh-cat-poop--show");
