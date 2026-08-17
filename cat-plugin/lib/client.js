@@ -617,6 +617,7 @@ window.__ModuleLoader__.load({
 			let grooming = false;
 			let groomTimer = 0;
 			let teleportTimer = 0;
+			let lastTeleportCheck = performance.now() + rand(12000, 22000);
 			let idleSince = 0;
 			let dragging = false;
 			let dragMoved = false;
@@ -800,6 +801,7 @@ window.__ModuleLoader__.load({
 			function startTeleport() {
 				state = "teleport";
 				setMode("teleport");
+				turnTarget = null;
 				root.classList.remove("dsh-cat--teleport-arrive");
 				void root.offsetWidth; // restart vanish animation
 				root.classList.add("dsh-cat--teleport");
@@ -1082,6 +1084,17 @@ window.__ModuleLoader__.load({
 				const dt = Math.min((now - last) / 1000, 0.05);
 				last = now;
 				scanEdgesIfStale(false);
+				// time-driven teleport: independent of the decision chain so it
+				// actually happens every so often (~every 20-45s when idle)
+				if (now >= lastTeleportCheck) {
+					if (state === "idle" && !dragging && !grooming) {
+						startTeleport();
+						lastTeleportCheck = now + rand(20000, 45000);
+					} else {
+						// not a good moment (napping/walking/etc.) — retry soon
+						lastTeleportCheck = now + 6000;
+					}
+				}
 				switch (state) {
 					case "idle":
 						if (now >= restUntil) {
