@@ -90,7 +90,7 @@ cat-plugin/
 ├── surgery.cjs         # bundle assembler
 ├── cordis.patch.yml    # profile loader patch sample
 └── package.json
-cat.svg                 # standing-cat artwork (this README's preview)
+cat.svg                 # default walking-cat skin (cat-orange.svg, preview image)
 cat-preview.html        # standalone preview page (loads lib/client.js)
 ```
 

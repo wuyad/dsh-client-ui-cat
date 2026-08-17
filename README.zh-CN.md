@@ -90,7 +90,7 @@ cat-plugin/
 ├── surgery.cjs         # bundle 拼装脚本
 ├── cordis.patch.yml    # profile loader patch 示例
 └── package.json
-cat.svg                 # 坐姿小猫插画（本 README 的预览图）
+cat.svg                 # 默认行走皮肤（cat-orange.svg，即 README 预览图）
 cat-preview.html        # 独立预览页（直接加载 lib/client.js）
 ```
 
