@@ -1,0 +1,9 @@
+# Your patch layer for this dsh profile, applied after every bundle layer:
+# a top-level YAML array of loader patch entries (id-targeted config
+# overrides, disables, and insert lists; `!!js` expressions allowed).
+
+# The wandering cat: a client plugin served from this profile's node_modules
+# (dsh-client-ui-cat), resolved by the client-modules node half at boot.
+- insert:
+    - id: ui-cat
+      name: 'dsh-client-ui-cat'

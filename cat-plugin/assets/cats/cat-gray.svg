@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 42" width="60" height="42" aria-hidden="true" focusable="false">
+  <g class="wc-tail">
+    <path d="M15,27 C5,26 3,15 9,9" fill="none" stroke="#9aa3ad" stroke-width="6.5" stroke-linecap="round"/>
+    <path d="M9.4,9.6 a3.2,3.2 0 0 1 -.8,-.6" fill="none" stroke="transparent" stroke-width="6.5" stroke-linecap="round"/>
+  </g>
+  <g class="wc-leg wc-leg-ff"><rect x="39" y="27" width="5" height="13" rx="2.5" fill="#9aa3ad" opacity=".82"/><rect x="39" y="36.5" width="5" height="3.5" rx="1.6" fill="transparent"/></g>
+  <g class="wc-leg wc-leg-bf"><rect x="19" y="27" width="5" height="13" rx="2.5" fill="#9aa3ad" opacity=".82"/><rect x="19" y="36.5" width="5" height="3.5" rx="1.6" fill="transparent"/></g>
+  <g class="wc-body">
+    <ellipse cx="29" cy="23" rx="18" ry="11" fill="#9aa3ad"/>
+    <ellipse cx="27" cy="29" rx="13" ry="6" fill="#d3d9df"/>
+    <g fill="#6b7682" opacity="0.5">
+      <rect x="22" y="13" width="2.4" height="9" rx="1.2"/>
+      <rect x="28" y="12.5" width="2.4" height="10" rx="1.2"/>
+      <rect x="34" y="13" width="2.4" height="9" rx="1.2"/>
+    </g>
+  </g>
+  <g class="wc-leg wc-leg-fn"><rect x="41.5" y="27" width="5.6" height="13.5" rx="2.8" fill="#9aa3ad"/><rect x="41.5" y="37" width="5.6" height="3.5" rx="1.7" fill="transparent"/></g>
+  <g class="wc-leg wc-leg-bn"><rect x="21.5" y="27" width="5.6" height="13.5" rx="2.8" fill="#9aa3ad"/><rect x="21.5" y="37" width="5.6" height="3.5" rx="1.7" fill="transparent"/></g>
+  <g class="wc-head">
+    <path d="M40,12 L41.5,2.5 L48,8.5 Z" fill="#9aa3ad"/>
+    <path d="M54.5,12 L53,2.5 L47,8.5 Z" fill="#9aa3ad"/>
+    <path d="M41.6,10.5 L42.6,5.2 L46,8.6 Z" fill="#e3a9b3"/>
+    <path d="M52.9,10.5 L51.9,5.2 L48.6,8.6 Z" fill="#e3a9b3"/>
+    <path d="M40,12 L41.5,2.5 L48,8.5 Z" fill="transparent" opacity=".55"/>
+    <path d="M54.5,12 L53,2.5 L47,8.5 Z" fill="transparent" opacity=".55"/>
+    <circle cx="47" cy="17" r="10" fill="#9aa3ad"/>
+    <ellipse cx="53" cy="19" rx="6" ry="6.5" fill="transparent" opacity=".35"/>
+    <ellipse cx="53.5" cy="20.5" rx="4.6" ry="4" fill="#d3d9df"/>
+    <g class="wc-eye"><ellipse cx="50" cy="16.5" rx="2.1" ry="2.7" fill="#ffce4d"/><ellipse cx="50.4" cy="17.4" rx=".8" ry="1.6" fill="#1a1a22"/><circle cx="49.3" cy="15.4" r=".7" fill="#fff" opacity=".9"/></g>
+    <path d="M56.4,18.6 l2.4,0 l-1.2,1.7 Z" fill="#9b8088"/>
+    <path d="M57.6,20.3 q0,1.6 -1.6,1.8" fill="none" stroke="#9aa3ad" stroke-width=".8" opacity=".5"/>
+    <g stroke="#d3d9df" stroke-width=".7" opacity=".75" stroke-linecap="round">
+      <line x1="55" y1="19.5" x2="60" y2="18.5"/>
+      <line x1="55" y1="20.6" x2="60" y2="21"/>
+    </g>
+  </g>
+</svg>

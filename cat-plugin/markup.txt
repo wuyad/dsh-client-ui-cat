@@ -1,0 +1,18 @@
+			root.innerHTML =
+				'<div class="dsh-cat-flip"><div class="dsh-cat-inner">' +
+				'<svg class="dsh-cat-svg" viewBox="0 0 60 42" width="60" height="42" focusable="false">' +
+				renderSkin(skinIndex) +
+				"</svg>" +
+				"</div></div>" +
+				'<div class="dsh-cat-bubble"></div>' +
+				'<div class="dsh-cat-fx">!</div>' +
+				'<div class="dsh-cat-bump"></div>' +
+				'<div class="dsh-cat-heart dsh-cat-heart--1"></div>' +
+				'<div class="dsh-cat-heart dsh-cat-heart--2"></div>' +
+				'<div class="dsh-cat-star dsh-cat-star--1"></div>' +
+				'<div class="dsh-cat-star dsh-cat-star--2"></div>' +
+				'<div class="dsh-cat-star dsh-cat-star--3"></div>' +
+				'<div class="dsh-cat-dust"><i></i><i></i><i></i></div>' +
+				'<div class="dsh-cat-zzz dsh-cat-zzz--1">z</div>' +
+				'<div class="dsh-cat-zzz dsh-cat-zzz--2">z</div>' +
+				'<div class="dsh-cat-zzz dsh-cat-zzz--3">z</div>';

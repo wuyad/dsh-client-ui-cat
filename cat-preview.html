@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>🐱 dsh-cat 预览</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 200vh;
+        overflow-x: hidden;
+        background: linear-gradient(180deg, #fdf6ec 0%, #f3e7d3 100%);
+        font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+        color: #5a4326;
+      }
+      .hint {
+        position: fixed;
+        left: 16px;
+        top: 14px;
+        z-index: 10;
+        font-size: 13px;
+        color: #9c6b2f;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid #f0dcb4;
+        border-radius: 10px;
+        padding: 6px 12px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      }
+      .col {
+        max-width: 640px;
+        margin: 0 auto;
+        padding: 90px 20px 40px;
+      }
+      h1 { font-size: 26px; }
+      h2 { font-size: 19px; margin-top: 34px; }
+      p { font-size: 15px; line-height: 1.75; margin: 18px 0; }
+      .card {
+        background: #fff;
+        border: 1px solid #f0dcb4;
+        border-radius: 14px;
+        padding: 18px 20px;
+        margin: 26px 0;
+        box-shadow: 0 4px 14px rgba(160, 110, 40, 0.08);
+      }
+      .card p { margin: 8px 0; }
+      button {
+        font-size: 14px;
+        padding: 8px 16px;
+        border-radius: 9px;
+        border: 1px solid #e8c88a;
+        background: #fff;
+        color: #8a5a20;
+        cursor: pointer;
+        margin-right: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hint">🐾 左键=撸猫 · 按住拖动=拎起来 · 右键=换皮肤(橘/白/奶牛/黑/灰/暹罗/影子) · 散步/嗅嗅/冲刺/飞跃/趴睡……</div>
+    <div class="col">
+      <h1>小猫的游乐场</h1>
+      <p>这是一段普通的文字。小猫喜欢沿着每一段文字的上边缘走来走去,从这头走到那头,然后…… 哎呀,掉下去了。</p>
+      <p>它会摔得很惨——头晕眼花、冒星星、头上起个包,但过一小会儿就会爬起来,甩甩脑袋继续玩。</p>
+      <div class="card">
+        <h2>卡片一:点击撸猫</h2>
+        <p>点击小猫,它会开心地站起来,冒出粉色的小心心,还会发出「呼噜呼噜~」的声音。</p>
+        <p>如果它刚好摔伤了,点它一下还能立刻帮它恢复过来哦。</p>
+      </div>
+      <h2>沿着边缘走</h2>
+      <p>它能识别页面里各种组件和段落的上边缘,把那些当成可以行走的小路。每次走到边缘的尽头,就是一次小小的冒险。</p>
+      <div class="card">
+        <h2>卡片二:摔伤与恢复</h2>
+        <p>摔伤时小猫的眼睛会变成 X X,头上顶着一个包,周围有小星星转圈圈。休息一两秒后它就会恢复,继续寻找下一条可以走的路。</p>
+        <p>有时候它也会在半路掉头往回走,毕竟不是每次都要摔的嘛。</p>
+        <button onclick="void 0">一个按钮</button>
+        <button onclick="void 0">另一个按钮</button>
+      </div>
+      <p>页面往下滚动,小猫能发现的新边缘就越多——它会在新的文字和组件上继续探险。</p>
+      <p>祝你和这只小橘猫玩得开心!喵~</p>
+    </div>
+    <script>
+      window.__ModuleLoader__ = {
+        load(m) {
+          window.__cat = m;
+        },
+      };
+    </script>
+    <script src="cat-plugin/lib/client.js"></script>
+    <script>
+      const m = window.__cat;
+      const exports = m.factory(function () {
+        throw new Error("preview: this bundle has no requires");
+      });
+      exports.apply({});
+    </script>
+  </body>
+</html>

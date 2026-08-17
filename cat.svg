@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" class="dsh-cat-svg" viewBox="0 0 96 88" width="96" height="88" focusable="false">
+					<defs>
+						<linearGradient id="dsh-cat-fur" x1="0" y1="0" x2="0" y2="1">
+							<stop offset="0" stop-color="#ffe6b8"/><stop offset="0.55" stop-color="#ffc271"/><stop offset="1" stop-color="#f59c38"/>
+						</linearGradient>
+						<linearGradient id="dsh-cat-fur-dark" x1="0" y1="0" x2="0" y2="1">
+							<stop offset="0" stop-color="#f0a24c"/><stop offset="1" stop-color="#dc8124"/>
+						</linearGradient>
+						<linearGradient id="dsh-cat-belly" x1="0" y1="0" x2="0" y2="1">
+							<stop offset="0" stop-color="#fff7e8"/><stop offset="1" stop-color="#ffe9c0"/>
+						</linearGradient>
+						<radialGradient id="dsh-cat-body-vol" cx="0.5" cy="0.32" r="0.78">
+							<stop offset="0" stop-color="#ffedd0"/><stop offset="0.5" stop-color="#ffc473"/><stop offset="1" stop-color="#ec9430"/>
+						</radialGradient>
+						<radialGradient id="dsh-cat-head-vol" cx="0.4" cy="0.3" r="0.72">
+							<stop offset="0" stop-color="#fff0d6"/><stop offset="0.55" stop-color="#ffcd7f"/><stop offset="1" stop-color="#f2a040"/>
+						</radialGradient>
+						<radialGradient id="dsh-cat-iris" cx="0.35" cy="0.32" r="0.85">
+							<stop offset="0" stop-color="#8a6b2f"/><stop offset="0.6" stop-color="#57420f"/><stop offset="1" stop-color="#2b210c"/>
+						</radialGradient>
+						<radialGradient id="dsh-cat-nose" cx="0.4" cy="0.35" r="0.7">
+							<stop offset="0" stop-color="#ff9aa0"/><stop offset="1" stop-color="#e95f68"/>
+						</radialGradient>
+					</defs>
+					<g class="dsh-cat-tail">
+						<path d="M 24 57 C 8 55, -1 40, 9 29 C 16 22, 28 27, 26 36" fill="none" stroke="url(#dsh-cat-fur-dark)" stroke-width="9" stroke-linecap="round"/>
+						<circle cx="10" cy="28" r="5.2" fill="#fff1d7"/>
+					</g>
+					<g class="dsh-cat-leg dsh-cat-leg--bl">
+						<rect x="28" y="60" width="11" height="18" rx="5.5" fill="url(#dsh-cat-fur-dark)"/>
+						<rect x="28" y="73.5" width="11" height="4.5" rx="2.2" fill="#ffe9c2"/>
+					</g>
+					<g class="dsh-cat-leg dsh-cat-leg--br">
+						<rect x="39" y="60" width="11" height="18" rx="5.5" fill="url(#dsh-cat-fur-dark)"/>
+						<rect x="39" y="73.5" width="11" height="4.5" rx="2.2" fill="#ffe9c2"/>
+					</g>
+					<g class="dsh-cat-body">
+						<path d="M 20 50 C 20 34, 32 30, 48 30 C 64 30, 76 34, 76 50 C 76 64, 66 74, 48 74 C 30 74, 20 64, 20 50 Z" fill="url(#dsh-cat-body-vol)"/>
+						<ellipse cx="48" cy="60" rx="17" ry="11" fill="url(#dsh-cat-belly)" opacity="0.95"/>
+						<ellipse cx="48" cy="41" rx="13" ry="5.5" fill="rgba(150,80,20,0.16)"/>
+						<path d="M 41 36 Q 48 43 55 36 Q 53 42 48 44.5 Q 43 42 41 36 Z" fill="#fff6e6" opacity="0.9"/>
+					</g>
+					<g class="dsh-cat-leg dsh-cat-leg--fl">
+						<rect x="55" y="58" width="11" height="20" rx="5.5" fill="url(#dsh-cat-fur)"/>
+						<rect x="55" y="72" width="11" height="6" rx="3" fill="#ffe9c2"/>
+						<path d="M 58.5 73.5 h 4 M 58.5 75 h 3" stroke="#d98a2b" stroke-width="1" stroke-linecap="round"/>
+					</g>
+					<g class="dsh-cat-leg dsh-cat-leg--fr">
+						<rect x="66" y="58" width="11" height="20" rx="5.5" fill="url(#dsh-cat-fur)"/>
+						<rect x="66" y="72" width="11" height="6" rx="3" fill="#ffe9c2"/>
+						<path d="M 69.5 73.5 h 4 M 69.5 75 h 3" stroke="#d98a2b" stroke-width="1" stroke-linecap="round"/>
+					</g>
+					<g class="dsh-cat-head">
+						<path d="M 33 4 L 27 -11 L 45 -1 Z" fill="url(#dsh-cat-fur-dark)"/>
+						<path d="M 63 4 L 69 -11 L 51 -1 Z" fill="url(#dsh-cat-fur-dark)"/>
+						<ellipse cx="48" cy="18" rx="24" ry="22" fill="url(#dsh-cat-head-vol)"/>
+						<path d="M 30 6 L 22 -13 L 44 -1 Q 36 3 33 10 Z" fill="url(#dsh-cat-fur)"/>
+						<path d="M 66 6 L 74 -13 L 52 -1 Q 60 3 63 10 Z" fill="url(#dsh-cat-fur)"/>
+						<path d="M 28 1 L 24 -8 L 37 -2 Z" fill="#ffb3bd"/>
+						<path d="M 68 1 L 72 -8 L 59 -2 Z" fill="#ffb3bd"/>
+						<path d="M 26 25 L 15 22 L 25 30 Z" fill="url(#dsh-cat-fur)"/>
+						<path d="M 70 25 L 81 22 L 71 30 Z" fill="url(#dsh-cat-fur)"/>
+						<g stroke="rgba(214,130,45,0.55)" stroke-width="2.3" stroke-linecap="round" fill="none">
+							<path d="M 44 2 q 1.2 6 -1 9"/>
+							<path d="M 48 1.5 q 0 6.5 -1 9.5"/>
+							<path d="M 52 2 q -1.2 6 1 9"/>
+						</g>
+						<g class="dsh-cat-eyes-open">
+							<g>
+								<ellipse cx="38.5" cy="17" rx="4.3" ry="5.1" fill="#fff"/>
+								<ellipse cx="38.5" cy="17.5" rx="3.1" ry="3.9" fill="url(#dsh-cat-iris)"/>
+								<circle cx="38.5" cy="17.5" r="1.5" fill="#241a0c"/>
+								<circle cx="37.4" cy="15.9" r="1.05" fill="#fff" opacity="0.95"/>
+								<path d="M 34.4 13.2 Q 38.5 10.8 42.6 13.2" stroke="#c98a3a" stroke-width="1.7" fill="none" stroke-linecap="round" opacity="0.85"/>
+							</g>
+							<g>
+								<ellipse cx="57.5" cy="17" rx="4.3" ry="5.1" fill="#fff"/>
+								<ellipse cx="57.5" cy="17.5" rx="3.1" ry="3.9" fill="url(#dsh-cat-iris)"/>
+								<circle cx="57.5" cy="17.5" r="1.5" fill="#241a0c"/>
+								<circle cx="56.4" cy="15.9" r="1.05" fill="#fff" opacity="0.95"/>
+								<path d="M 53.4 13.2 Q 57.5 10.8 61.6 13.2" stroke="#c98a3a" stroke-width="1.7" fill="none" stroke-linecap="round" opacity="0.85"/>
+							</g>
+						</g>
+						<g class="dsh-cat-eyes-closed">
+							<path d="M 34.5 18 q 4 -4.5 8 0" stroke="#5a3f22" stroke-width="2.7" fill="none" stroke-linecap="round"/>
+							<path d="M 53.5 18 q 4 -4.5 8 0" stroke="#5a3f22" stroke-width="2.7" fill="none" stroke-linecap="round"/>
+						</g>
+						<g class="dsh-cat-eyes-hurt">
+							<g stroke="#4a3320" stroke-width="2.4" stroke-linecap="round">
+								<path d="M 34.8 14.6 L 42.2 21.4 M 42.2 14.6 L 34.8 21.4"/>
+								<path d="M 53.8 14.6 L 61.2 21.4 M 61.2 14.6 L 53.8 21.4"/>
+							</g>
+						</g>
+						<ellipse cx="31.5" cy="24.5" rx="3.6" ry="2.2" fill="#ffa9a9" opacity="0.7"/>
+						<ellipse cx="64.5" cy="24.5" rx="3.6" ry="2.2" fill="#ffa9a9" opacity="0.7"/>
+						<path d="M 48 25.5 L 51.6 29.6 Q 48 32.2 44.4 29.6 Z" fill="url(#dsh-cat-nose)"/>
+						<ellipse cx="47" cy="27.6" rx="1.4" ry="0.9" fill="#fff" opacity="0.6"/>
+						<path d="M 48 32.2 L 48 34.8 M 41.6 34.4 Q 48 38.6 54.4 34.4" stroke="#7a4a24" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+						<g stroke="rgba(122,74,36,0.6)" stroke-width="1.3" stroke-linecap="round">
+							<path d="M 27 25 L 14 22"/>
+							<path d="M 27 29 L 13 30"/>
+							<path d="M 69 25 L 82 22"/>
+							<path d="M 69 29 L 83 30"/>
+						</g>
+					</g>
+					<g class="dsh-cat-collar">
+						<path d="M 35 38 Q 48 42.5 61 38 L 62 43.5 Q 48 47.5 34 43.5 Z" fill="#e9623f"/>
+						<circle cx="48" cy="47.5" r="4.7" fill="#ffd166"/>
+						<path d="M 45.6 48.6 h 4.8" stroke="#a8740f" stroke-width="1.2" stroke-linecap="round"/>
+					</g>
+				</svg>

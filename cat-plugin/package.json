@@ -1,0 +1,19 @@
+{
+  "name": "dsh-client-ui-cat",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A little tabby cat that wanders around the DeepSeek Harness UI.",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json"
+  },
+  "dsh": {
+    "client": {
+      "platform": "web",
+      "immediately": true
+    }
+  }
+}
