@@ -375,7 +375,7 @@ window.__ModuleLoader__.load({
 }
 /* "!" shock mark */
 .dsh-cat-fx {
-  position: absolute; left: 22px; top: -34px;
+  position: absolute; left: 39px; top: -34px;
   width: 16px; height: 16px;
   border-radius: 50%;
   background: #ff6b6b;
@@ -391,6 +391,8 @@ window.__ModuleLoader__.load({
   30% { opacity: 1; transform: scale(1.15); }
   100% { opacity: 0; transform: scale(1) translateY(-10px); }
 }
+/* keep the "!" above the head when the cat faces left */
+.dsh-cat--face-left .dsh-cat-fx { left: 5px; }
 /* dizzy stars */
 .dsh-cat-star {
   position: absolute; left: 40px; top: -14px;
@@ -555,14 +557,26 @@ window.__ModuleLoader__.load({
   0% { opacity: 1; transform: scale(1); }
   100% { opacity: 0; transform: scale(0.2) rotate(30deg); }
 }
-/* after pooping: proud tail flicks, then sniff the result */
+/* after pooping: proud tail flicks, look back at it, then sniff */
 .dsh-cat--poop-done .dsh-cat-inner { transform: translateY(1px); }
 .dsh-cat--poop-done .wc-tail { animation: dsh-cat-tail-flick 0.42s ease-in-out infinite; }
 @keyframes dsh-cat-tail-flick {
   0%, 100% { transform: rotate(-8deg); }
   50% { transform: rotate(-52deg); }
 }
-.dsh-cat--poop-done .wc-head { animation: dsh-cat-poop-sniff 1.15s ease-in-out 2; }
+/* look back at the result first */
+.dsh-cat--poop-turn .dsh-cat-inner { animation: dsh-cat-poop-turn 0.7s ease-in-out forwards; }
+@keyframes dsh-cat-poop-turn {
+  0% { transform: translateY(1px) rotate(0deg); }
+  100% { transform: translateY(1px) rotate(10deg); }
+}
+.dsh-cat--poop-turn .wc-head { animation: dsh-cat-poop-lookback 0.7s ease-in-out forwards; }
+@keyframes dsh-cat-poop-lookback {
+  0% { transform: rotate(42deg) translateY(2px); }
+  100% { transform: rotate(-28deg) translateY(4px); }
+}
+/* then lower the head and sniff twice */
+.dsh-cat--poop-sniff .wc-head { animation: dsh-cat-poop-sniff 1.15s ease-in-out 2; }
 @keyframes dsh-cat-poop-sniff {
   0%, 100% { transform: rotate(42deg) translateY(2px); }
   25% { transform: rotate(56deg) translateY(5px); }
@@ -745,7 +759,8 @@ window.__ModuleLoader__.load({
 				"dsh-cat--hurt", "dsh-cat--recover", "dsh-cat--petted", "dsh-cat--nap",
 				"dsh-cat--drag", "dsh-cat--groom", "dsh-cat--groom-scratch", "dsh-cat--groom-lick",
 				"dsh-cat--cliff", "dsh-cat--sniff", "dsh-cat--run", "dsh-cat--jump",
-				"dsh-cat--teleport", "dsh-cat--teleport-arrive", "dsh-cat--poop-done"
+				"dsh-cat--teleport", "dsh-cat--teleport-arrive", "dsh-cat--poop-done",
+				"dsh-cat--poop-turn", "dsh-cat--poop-sniff"
 			];
 			function setMode(stateName) {
 				for (const c of STATE_CLASSES) root.classList.remove(c);
@@ -1135,15 +1150,21 @@ window.__ModuleLoader__.load({
 				poopTimer = setTimeout(() => {
 					showBubble("💩", 1200);
 					leavePoop();
-					// proud tail flicks, then sniff the result before moving on
+					// look back at the result, then sniff it before moving on
 					state = "poop-done";
 					setMode("poop-done");
+					root.classList.add("dsh-cat--poop-turn");
 					poopTimer = setTimeout(() => {
-						state = "idle";
-						setMode("idle");
-						restUntil = performance.now() + rand(1200, 2400);
-						poopCooldownUntil = performance.now() + rand(30000, 50000);
-					}, rand(2600, 3600));
+						root.classList.remove("dsh-cat--poop-turn");
+						root.classList.add("dsh-cat--poop-sniff");
+						poopTimer = setTimeout(() => {
+							root.classList.remove("dsh-cat--poop-sniff");
+							state = "idle";
+							setMode("idle");
+							restUntil = performance.now() + rand(1200, 2400);
+							poopCooldownUntil = performance.now() + rand(30000, 50000);
+						}, rand(2400, 3000));
+					}, 700);
 				}, rand(3400, 4600));
 			}
 			function leavePoop() {
