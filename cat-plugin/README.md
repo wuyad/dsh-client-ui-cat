@@ -17,33 +17,13 @@ A little tabby cat that wanders around the **DeepSeek Harness** web UI — walki
 
 ## Installation
 
-This is a client plugin for a DeepSeek Harness profile. It has two halves:
-
-- `lib/index.js` — the host half (a deliberate no-op so the Loader entry activates cleanly)
-- `lib/client.js` — the browser half that renders the wandering cat
-
-### Option A — Install from npm (recommended)
+Published on **npm**: [`dsh-client-ui-cat`](https://www.npmjs.com/package/dsh-client-ui-cat). One command installs it into your DeepSeek Harness profile:
 
 ```bash
 dsh plugin --profile web add dsh-client-ui-cat
 ```
 
-This adds the package to the profile and, because it declares `dsh.client`, the client-modules half picks it up automatically at boot. No manual copying needed.
-
-### Option B — Manual copy into the profile
-
-### 1. Put the package where the profile can resolve it
-
-Copy this folder into your profile's `web/node_modules` as `dsh-client-ui-cat`:
-
-```bash
-# example: ~/.dsh/profiles/web
-cp -r dsh-client-ui-cat ~/.dsh/profiles/web/node_modules/
-```
-
-### 2. Register it in the profile's `cordis.patch.yml`
-
-Add a loader patch entry so the client-modules half loads it at boot:
+Then add a loader entry to the profile's `cordis.patch.yml` (create the file if missing):
 
 ```yaml
 - insert:
@@ -51,9 +31,13 @@ Add a loader patch entry so the client-modules half loads it at boot:
       name: 'dsh-client-ui-cat'
 ```
 
-### 3. Restart the harness and refresh the page
+Restart the harness and refresh the page — the cat appears at the bottom of the page and starts exploring.
 
-The cat should appear at the bottom of the page and start exploring.
+> **No build, no copy-paste.** The package declares `dsh.client`, so the client-modules half picks it up automatically at boot. If you don't use `dsh plugin`, `npm install dsh-client-ui-cat` inside the profile directory works too.
+
+### Manual (from this repo)
+
+Copy the `cat-plugin/` folder into your profile's `web/node_modules` as `dsh-client-ui-cat`, then register it in `cordis.patch.yml` as shown above.
 
 ## Usage
 

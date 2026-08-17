@@ -17,33 +17,13 @@
 
 ## 安装
 
-这是 DeepSeek Harness profile 的客户端插件，分两部分：
-
-- `lib/index.js` — 宿主端（故意为空实现，让 Loader 入口能干净激活）
-- `lib/client.js` — 浏览器端，负责渲染这只流浪猫
-
-### 方式 A — 从 npm 安装（推荐）
+已发布到 **npm**：[`dsh-client-ui-cat`](https://www.npmjs.com/package/dsh-client-ui-cat)。一条命令装进你的 DeepSeek Harness profile：
 
 ```bash
 dsh plugin --profile web add dsh-client-ui-cat
 ```
 
-这会把它加入 profile，并且因为它声明了 `dsh.client`，client-modules 会在启动时自动加载，无需手动复制。
-
-### 方式 B — 手动复制进 profile
-
-### 1. 把包放到 profile 能解析的位置
-
-把本目录复制到 profile 的 `web/node_modules` 下，命名为 `dsh-client-ui-cat`：
-
-```bash
-# 示例：~/.dsh/profiles/web
-cp -r dsh-client-ui-cat ~/.dsh/profiles/web/node_modules/
-```
-
-### 2. 在 profile 的 `cordis.patch.yml` 里注册
-
-添加一条 loader patch 条目，让 client-modules 在启动时加载它：
+然后在 profile 的 `cordis.patch.yml` 里加一条 loader 条目（文件不存在就新建）：
 
 ```yaml
 - insert:
@@ -51,9 +31,13 @@ cp -r dsh-client-ui-cat ~/.dsh/profiles/web/node_modules/
       name: 'dsh-client-ui-cat'
 ```
 
-### 3. 重启 harness 并刷新页面
+重启 harness 并刷新页面——小猫会出现在页面底部，开始四处探险。
 
-小猫会出现在页面底部，开始四处探险。
+> **无需构建、无需复制粘贴。** 包声明了 `dsh.client`，client-modules 会在启动时自动加载。如果不使用 `dsh plugin`，在 profile 目录里执行 `npm install dsh-client-ui-cat` 同样有效。
+
+### 手动安装（用本仓库源码）
+
+把 `cat-plugin/` 目录复制到 profile 的 `web/node_modules` 下，命名为 `dsh-client-ui-cat`，再按上面的方式在 `cordis.patch.yml` 里注册即可。
 
 ## 使用方法
 
