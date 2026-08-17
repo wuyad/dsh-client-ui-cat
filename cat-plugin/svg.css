@@ -491,3 +491,26 @@
   60% { transform: scale(1.12) rotate(10deg); opacity: 1; }
   100% { transform: scale(1) rotate(0deg); opacity: 1; }
 }
+/* backing up before turning around: legs walk in reverse */
+.dsh-cat--backing .wc-leg-fn,
+.dsh-cat--backing .wc-leg-bf { animation-direction: reverse; }
+.dsh-cat--backing .wc-leg-ff,
+.dsh-cat--backing .wc-leg-bn { animation-direction: normal; }
+.dsh-cat--backing .dsh-cat-inner { transform: translateX(-2px); }
+/* teleport smoke puffs: bright swirling particles */
+.dsh-cat-poof {
+  position: fixed;
+  width: 0; height: 0;
+  z-index: 2147483001;
+  pointer-events: none;
+}
+.dsh-cat-poof i {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.95), rgba(255,205,125,0.7) 55%, transparent 78%);
+  animation: dsh-cat-poof-p 0.85s ease-out forwards;
+}
+@keyframes dsh-cat-poof-p {
+  0% { transform: translate(0,0) scale(0.3) rotate(0deg); opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) scale(1.9) rotate(var(--rot)); opacity: 0; }
+}

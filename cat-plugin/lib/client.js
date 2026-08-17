@@ -504,6 +504,29 @@ window.__ModuleLoader__.load({
   60% { transform: scale(1.12) rotate(10deg); opacity: 1; }
   100% { transform: scale(1) rotate(0deg); opacity: 1; }
 }
+/* backing up before turning around: legs walk in reverse */
+.dsh-cat--backing .wc-leg-fn,
+.dsh-cat--backing .wc-leg-bf { animation-direction: reverse; }
+.dsh-cat--backing .wc-leg-ff,
+.dsh-cat--backing .wc-leg-bn { animation-direction: normal; }
+.dsh-cat--backing .dsh-cat-inner { transform: translateX(-2px); }
+/* teleport smoke puffs: bright swirling particles */
+.dsh-cat-poof {
+  position: fixed;
+  width: 0; height: 0;
+  z-index: 2147483001;
+  pointer-events: none;
+}
+.dsh-cat-poof i {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.95), rgba(255,205,125,0.7) 55%, transparent 78%);
+  animation: dsh-cat-poof-p 0.85s ease-out forwards;
+}
+@keyframes dsh-cat-poof-p {
+  0% { transform: translate(0,0) scale(0.3) rotate(0deg); opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) scale(1.9) rotate(var(--rot)); opacity: 0; }
+}
 `;
 		// Visual cat size (the asset's 60x42 canvas).
 		const CAT_W = 60;
@@ -617,6 +640,8 @@ window.__ModuleLoader__.load({
 			let grooming = false;
 			let groomTimer = 0;
 			let teleportTimer = 0;
+			let backing = false;    // backing up a few steps before turning around
+			let backX1 = 0;
 			let lastTeleportCheck = performance.now() + rand(12000, 22000);
 			let idleSince = 0;
 			let dragging = false;
@@ -802,10 +827,12 @@ window.__ModuleLoader__.load({
 				state = "teleport";
 				setMode("teleport");
 				turnTarget = null;
+				backing = false;
+				root.classList.remove("dsh-cat--backing");
 				root.classList.remove("dsh-cat--teleport-arrive");
 				void root.offsetWidth; // restart vanish animation
 				root.classList.add("dsh-cat--teleport");
-				puffDust();
+				spawnPoof(x + CAT_W / 2, y + CAT_H / 2);
 				const maxX = Math.max(MARGIN + 1, vw() - CAT_W - MARGIN);
 				const maxY = Math.max(MARGIN + 30, vh() - CAT_H - MARGIN);
 				const spot = pickTeleportSpot(maxX, maxY);
@@ -818,6 +845,7 @@ window.__ModuleLoader__.load({
 					ledge = null;
 					onLedge = false;
 					paint();
+					spawnPoof(x + CAT_W / 2, y + CAT_H / 2);
 					root.classList.remove("dsh-cat--teleport");
 					state = "idle";
 					setMode("idle");
@@ -833,10 +861,10 @@ window.__ModuleLoader__.load({
 					ledge = null;
 					onLedge = false;
 					paint();
+					spawnPoof(x + CAT_W / 2, y + CAT_H / 2);
 					root.classList.remove("dsh-cat--teleport");
 					void root.offsetWidth;
 					root.classList.add("dsh-cat--teleport-arrive");
-					puffDust();
 					teleportTimer = setTimeout(() => {
 						root.classList.remove("dsh-cat--teleport-arrive");
 						state = "idle";
@@ -862,6 +890,29 @@ window.__ModuleLoader__.load({
 				dust.classList.remove("dsh-cat-dust--puff");
 				void dust.offsetWidth;
 				dust.classList.add("dsh-cat-dust--puff");
+			}
+			function spawnPoof(cx, cy) {
+				// bright swirling smoke: 10 particles fanning out with rotation
+				const poof = document.createElement("div");
+				poof.className = "dsh-cat-poof";
+				poof.style.left = cx + "px";
+				poof.style.top = cy + "px";
+				const N = 10;
+				for (let k = 0; k < N; k++) {
+					const p = document.createElement("i");
+					const ang = (k / N) * Math.PI * 2 + rand(-0.4, 0.4);
+					const dist = rand(16, 40);
+					const size = rand(5, 12);
+					p.style.setProperty("--dx", Math.cos(ang) * dist + "px");
+					p.style.setProperty("--dy", Math.sin(ang) * dist - 8 + "px");
+					p.style.setProperty("--rot", rand(-280, 280) + "deg");
+					p.style.width = size + "px";
+					p.style.height = size + "px";
+					p.style.margin = -size / 2 + "px 0 0 " + -size / 2 + "px";
+					poof.appendChild(p);
+				}
+				document.body.appendChild(poof);
+				setTimeout(() => poof.remove(), 900);
 			}
 			function shakePage() {
 				if (reduced) return;
@@ -1108,6 +1159,25 @@ window.__ModuleLoader__.load({
 						} else if (!grooming && now - idleSince > 900 && Math.random() < dt * 0.12) maybeGroom();
 						break;
 					case "edge": {
+						if (backing) {
+							// backing up before turning around (face stays toward the edge)
+							const db = backX1 - x;
+							const d = Math.abs(db);
+							const stepLen = speed * dt;
+							if (d <= Math.max(stepLen, 3)) {
+								x = backX1;
+								backing = false;
+								root.classList.remove("dsh-cat--backing");
+								turnTarget = tx <= ledge.x1 + 5 ? ledge.x2 - CAT_W : ledge.x1;
+								state = "idle";
+								setMode("idle");
+								restUntil = now + 350;
+							} else {
+								x += (db / d) * stepLen;
+							}
+							paint();
+							break;
+						}
 						const dx = tx - x;
 						const d = Math.abs(dx);
 						const stepLen = speed * dt;
@@ -1116,11 +1186,25 @@ window.__ModuleLoader__.load({
 							// at the end of the ledge — decide: turn back, rest, or fall
 							const roll = Math.random();
 							if (roll < 0.45) {
-								// stop for a beat, then stroll back along the ledge
-								turnTarget = tx <= ledge.x1 + 5 ? ledge.x2 - CAT_W : ledge.x1;
-								state = "idle";
-								setMode("idle");
-								restUntil = now + 350;
+								if (Math.random() < 0.35) {
+									// back up a few steps before turning around
+									backing = true;
+									root.classList.add("dsh-cat--backing");
+									const dir = tx <= ledge.x1 + 5 ? 1 : -1;
+									backX1 = clamp(x + dir * rand(16, 34), ledge.x1, Math.max(ledge.x1 + 1, ledge.x2 - CAT_W));
+									if (Math.abs(backX1 - x) < 12) backing = false; // no room — just turn
+									else {
+										speed = 20 + Math.random() * 10; // cautious slow backpedal
+										root.style.setProperty("--dsh-step", clamp(32 / speed, 0.5, 1.0).toFixed(3) + "s");
+									}
+								}
+								if (!backing) {
+									// stop for a beat, then stroll back along the ledge
+									turnTarget = tx <= ledge.x1 + 5 ? ledge.x2 - CAT_W : ledge.x1;
+									state = "idle";
+									setMode("idle");
+									restUntil = now + 350;
+								}
 							} else if (roll < 0.65) {
 								// sit and rest right here on the edge
 								state = "idle";
@@ -1287,6 +1371,8 @@ window.__ModuleLoader__.load({
 				clearTimeout(sniffTimer);
 				clearTimeout(teleportTimer);
 				root.classList.remove("dsh-cat--teleport", "dsh-cat--teleport-arrive");
+				backing = false;
+				root.classList.remove("dsh-cat--backing");
 				dragging = true;
 				dragMoved = false;
 				pointerId = e.pointerId;
