@@ -2,7 +2,7 @@
 
 A little tabby cat that wanders around the **DeepSeek Harness** web UI — walking along the top edges of text and components, hopping onto ledges, sniffing, sprinting, tumbling off cliffs, getting hurt and recovering, taking long naps, and letting you pet it.
 
-![cat-preview](cat.svg)
+![cat-preview](https://cdn.jsdelivr.net/npm/dsh-client-ui-cat/cat.svg)
 
 ## Features
 

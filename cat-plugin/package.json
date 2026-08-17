@@ -1,6 +1,6 @@
 {
   "name": "dsh-client-ui-cat",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A little tabby cat that wanders around the DeepSeek Harness UI — walking, hopping, napping and getting petted. (dsh 客户端插件：一只在 DeepSeek Harness 界面里游荡的小猫)",
   "license": "MIT",
   "type": "module",

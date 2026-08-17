@@ -2,7 +2,7 @@
 
 一只会在 **DeepSeek Harness** Web 界面里到处逛的小猫：沿着文字和组件的上边缘行走、跳上台阶、嗅探、冲刺、从边缘掉下去摔伤再爬起来、大部分时间趴着睡觉，还会让你撸。
 
-![小猫预览](cat.svg)
+![小猫预览](https://cdn.jsdelivr.net/npm/dsh-client-ui-cat/cat.svg)
 
 ## 功能特性
 
