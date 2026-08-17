@@ -390,6 +390,8 @@
 .dsh-cat--hurt .dsh-cat-star { opacity: 1; animation: dsh-cat-star-orbit 1.15s linear infinite; }
 .dsh-cat-star--2 { animation-delay: 0.38s !important; }
 .dsh-cat-star--3 { animation-delay: 0.76s !important; }
+/* keep the dizzy stars above the head when the cat faces left */
+.dsh-cat--face-left .dsh-cat-star { left: 7px; }
 @keyframes dsh-cat-star-orbit {
   0% { transform: translate(0, 0) rotate(0deg) scale(0.8); }
   25% { transform: translate(16px, -11px) rotate(90deg) scale(1); }

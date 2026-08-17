@@ -403,6 +403,8 @@ window.__ModuleLoader__.load({
 .dsh-cat--hurt .dsh-cat-star { opacity: 1; animation: dsh-cat-star-orbit 1.15s linear infinite; }
 .dsh-cat-star--2 { animation-delay: 0.38s !important; }
 .dsh-cat-star--3 { animation-delay: 0.76s !important; }
+/* keep the dizzy stars above the head when the cat faces left */
+.dsh-cat--face-left .dsh-cat-star { left: 7px; }
 @keyframes dsh-cat-star-orbit {
   0% { transform: translate(0, 0) rotate(0deg) scale(0.8); }
   25% { transform: translate(16px, -11px) rotate(90deg) scale(1); }
@@ -677,6 +679,7 @@ window.__ModuleLoader__.load({
 			let backing = false;    // backing up a few steps before turning around
 			let backX1 = 0;
 			let poopTimer = 0;
+			let poopCooldownUntil = 0; // don't poop again too soon
 			let lastTeleportCheck = performance.now() + rand(12000, 22000);
 			let lastPoopCheck = performance.now() + rand(15000, 30000);
 			let idleSince = 0;
@@ -1117,6 +1120,7 @@ window.__ModuleLoader__.load({
 				}, rand(12000, 24000));
 			}
 			function startPoop() {
+				if (performance.now() < poopCooldownUntil) return; // still cooling down
 				// squat (nap pose) and strain for a while, then drop a poop that stays until clicked
 				state = "poop";
 				setMode("nap");
@@ -1132,8 +1136,9 @@ window.__ModuleLoader__.load({
 						state = "idle";
 						setMode("idle");
 						restUntil = performance.now() + rand(1200, 2400);
-					}, rand(1800, 2600));
-				}, rand(2600, 3600));
+						poopCooldownUntil = performance.now() + rand(30000, 50000);
+					}, rand(2600, 3600));
+				}, rand(3400, 4600));
 			}
 			function leavePoop() {
 				const el = document.createElement("div");
@@ -1148,7 +1153,7 @@ window.__ModuleLoader__.load({
 					? rect.right - rand(4, 14)
 					: rect.left + rand(4, 14);
 				el.style.left = rearX + "px";
-				el.style.top = (rect.bottom - 3) + "px";
+				el.style.top = (rect.bottom - 10) + "px";
 				document.body.appendChild(el);
 				void el.offsetWidth;
 				el.classList.add("dsh-cat-poop--show");
