@@ -530,7 +530,7 @@ window.__ModuleLoader__.load({
 /* cat poop: stays until clicked or page refresh */
 .dsh-cat-poop {
   position: fixed;
-  width: 26px; height: 22px;
+  width: 13px; height: 11px;
   z-index: 2147483000;
   pointer-events: auto;
   cursor: pointer;
@@ -1122,7 +1122,7 @@ window.__ModuleLoader__.load({
 				el.className = "dsh-cat-poop";
 				el.setAttribute("aria-hidden", "true");
 				el.innerHTML =
-					'<svg viewBox="0 0 26 22" width="26" height="22"><path d="M8 6 C4 6 3 10 5.5 12 C2.5 12.5 2 16 5 18 C4 19.5 5 21 7.5 21 L18.5 21 C21 21 22 19.5 21 18 C24 16 23.5 12.5 20.5 12 C23 10 22 6 18 6 C16 2.5 13 1.5 11 3 C9.5 4 8 4.5 8 6 Z" fill="#a4703f"/><path d="M5.5 12 C2.5 12.5 2 16 5 18 C4 19.5 5 21 7.5 21 L9 21 C8 19 8.5 16.5 10 15 C8 14 6.5 13 5.5 12 Z" fill="#c9965f"/></svg>';
+					'<svg viewBox="0 0 26 22" width="13" height="11"><path d="M8 6 C4 6 3 10 5.5 12 C2.5 12.5 2 16 5 18 C4 19.5 5 21 7.5 21 L18.5 21 C21 21 22 19.5 21 18 C24 16 23.5 12.5 20.5 12 C23 10 22 6 18 6 C16 2.5 13 1.5 11 3 C9.5 4 8 4.5 8 6 Z" fill="#a4703f"/><path d="M5.5 12 C2.5 12.5 2 16 5 18 C4 19.5 5 21 7.5 21 L9 21 C8 19 8.5 16.5 10 15 C8 14 6.5 13 5.5 12 Z" fill="#c9965f"/></svg>';
 				el.style.left = (x + rand(-4, 10)) + "px";
 				el.style.top = (y + CAT_H - 4) + "px";
 				document.body.appendChild(el);
@@ -1159,7 +1159,7 @@ window.__ModuleLoader__.load({
 				maybeMeow();
 				scanEdgesIfStale(true);
 				// occasionally poop where it stands (left behind until clicked)
-				if (!mustMove && Math.random() < 0.07) {
+				if (!mustMove && Math.random() < 0.14) {
 					startPoop();
 					return;
 				}
