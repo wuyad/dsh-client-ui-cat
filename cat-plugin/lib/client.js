@@ -553,6 +553,14 @@ window.__ModuleLoader__.load({
   0% { opacity: 1; transform: scale(1); }
   100% { opacity: 0; transform: scale(0.2) rotate(30deg); }
 }
+/* after pooping: proud tail flicks, then sniff the result */
+.dsh-cat--poop-done .dsh-cat-inner { transform: translateY(1px); }
+.dsh-cat--poop-done .wc-tail { animation: dsh-cat-tail-flick 0.42s ease-in-out infinite; }
+@keyframes dsh-cat-tail-flick {
+  0%, 100% { transform: rotate(-8deg); }
+  50% { transform: rotate(-52deg); }
+}
+.dsh-cat--poop-done .wc-head { animation: dsh-cat-sniff 1.1s ease-in-out; }
 `;
 		// Visual cat size (the asset's 60x42 canvas).
 		const CAT_W = 60;
@@ -728,7 +736,7 @@ window.__ModuleLoader__.load({
 				"dsh-cat--hurt", "dsh-cat--recover", "dsh-cat--petted", "dsh-cat--nap",
 				"dsh-cat--drag", "dsh-cat--groom", "dsh-cat--groom-scratch", "dsh-cat--groom-lick",
 				"dsh-cat--cliff", "dsh-cat--sniff", "dsh-cat--run", "dsh-cat--jump",
-				"dsh-cat--teleport", "dsh-cat--teleport-arrive"
+				"dsh-cat--teleport", "dsh-cat--teleport-arrive", "dsh-cat--poop-done"
 			];
 			function setMode(stateName) {
 				for (const c of STATE_CLASSES) root.classList.remove(c);
@@ -750,6 +758,7 @@ window.__ModuleLoader__.load({
 				else if (stateName === "drag") root.classList.add("dsh-cat--drag");
 				else if (stateName === "pet") root.classList.add("dsh-cat--petted");
 				else if (stateName === "teleport") root.classList.add("dsh-cat--teleport");
+				else if (stateName === "poop-done") root.classList.add("dsh-cat--poop-done");
 			}
 			const paint = () => {
 				root.style.transform = "translate3d(" + x + "px," + y + "px,0)";
@@ -1116,9 +1125,14 @@ window.__ModuleLoader__.load({
 				poopTimer = setTimeout(() => {
 					showBubble("💩", 1200);
 					leavePoop();
-					state = "idle";
-					setMode("idle");
-					restUntil = performance.now() + rand(1200, 2400);
+					// proud tail flicks, then sniff the result before moving on
+					state = "poop-done";
+					setMode("poop-done");
+					poopTimer = setTimeout(() => {
+						state = "idle";
+						setMode("idle");
+						restUntil = performance.now() + rand(1200, 2400);
+					}, rand(1800, 2600));
 				}, rand(2600, 3600));
 			}
 			function leavePoop() {
