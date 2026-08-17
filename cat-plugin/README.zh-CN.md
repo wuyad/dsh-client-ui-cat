@@ -22,6 +22,16 @@
 - `lib/index.js` — 宿主端（故意为空实现，让 Loader 入口能干净激活）
 - `lib/client.js` — 浏览器端，负责渲染这只流浪猫
 
+### 方式 A — 从 npm 安装（推荐）
+
+```bash
+dsh plugin --profile web add dsh-client-ui-cat
+```
+
+这会把它加入 profile，并且因为它声明了 `dsh.client`，client-modules 会在启动时自动加载，无需手动复制。
+
+### 方式 B — 手动复制进 profile
+
 ### 1. 把包放到 profile 能解析的位置
 
 把本目录复制到 profile 的 `web/node_modules` 下，命名为 `dsh-client-ui-cat`：
@@ -80,10 +90,13 @@ node surgery.cjs
 本包是纯源码、无构建步骤：`lib/client.js` 是可直接加载的 ES module，CSS 已内联，因此任意分发渠道都可用：
 
 ```bash
-cd cat-plugin
-npm publish          # 发布到 npm（files 白名单：lib/、cat.svg、README）
-# 或
-npm pack             # → dsh-client-ui-cat-0.1.0.tgz
+# 发布到 npm（files 白名单：lib/、cat.svg、README）
+npm publish
+
+# 或分发 tarball
+npm pack          # → dsh-client-ui-cat-0.1.0.tgz
+dsh plugin --profile web add ./dsh-client-ui-cat-0.1.0.tgz
+
 # 或直接从 git 安装（本包无需构建）
 dsh plugin --profile web add github:you/dsh-client-ui-cat
 ```

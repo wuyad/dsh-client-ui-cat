@@ -22,6 +22,16 @@ This is a client plugin for a DeepSeek Harness profile. It has two halves:
 - `lib/index.js` — the host half (a deliberate no-op so the Loader entry activates cleanly)
 - `lib/client.js` — the browser half that renders the wandering cat
 
+### Option A — Install from npm (recommended)
+
+```bash
+dsh plugin --profile web add dsh-client-ui-cat
+```
+
+This adds the package to the profile and, because it declares `dsh.client`, the client-modules half picks it up automatically at boot. No manual copying needed.
+
+### Option B — Manual copy into the profile
+
 ### 1. Put the package where the profile can resolve it
 
 Copy this folder into your profile's `web/node_modules` as `dsh-client-ui-cat`:
@@ -80,10 +90,13 @@ node surgery.cjs
 The package is pure-source (no build step): `lib/client.js` is a ready-to-serve ES module with the CSS inlined, so any distribution channel works:
 
 ```bash
-cd cat-plugin
-npm publish          # publish to npm (files whitelist: lib/, cat.svg, READMEs)
-# or
-npm pack             # → dsh-client-ui-cat-0.1.0.tgz
+# publish to npm (files whitelist: lib/, cat.svg, READMEs)
+npm publish
+
+# or hand out a tarball
+npm pack          # → dsh-client-ui-cat-0.1.0.tgz
+dsh plugin --profile web add ./dsh-client-ui-cat-0.1.0.tgz
+
 # or install straight from git (no build required for this package)
 dsh plugin --profile web add github:you/dsh-client-ui-cat
 ```

@@ -1,15 +1,39 @@
 {
   "name": "dsh-client-ui-cat",
   "version": "0.1.0",
-  "private": true,
+  "description": "A little tabby cat that wanders around the DeepSeek Harness UI — walking, hopping, napping and getting petted. (dsh 客户端插件：一只在 DeepSeek Harness 界面里游荡的小猫)",
+  "license": "MIT",
   "type": "module",
-  "description": "A little tabby cat that wanders around the DeepSeek Harness UI.",
   "main": "lib/index.js",
   "exports": {
     ".": "./lib/index.js",
     "./client": "./lib/client.js",
     "./package.json": "./package.json"
   },
+  "files": [
+    "lib",
+    "cat.svg",
+    "README.md",
+    "README.zh-CN.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "check": "node --check lib/client.js && node --check lib/index.js",
+    "gen:skins": "node gen-skins.cjs",
+    "splice": "node surgery.cjs",
+    "prepack": "npm run check"
+  },
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "plugin",
+    "client-plugin",
+    "ui",
+    "cat",
+    "pet"
+  ],
   "dsh": {
     "client": {
       "platform": "web",
