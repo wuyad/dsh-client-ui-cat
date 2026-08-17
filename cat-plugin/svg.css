@@ -549,4 +549,10 @@
   0%, 100% { transform: rotate(-8deg); }
   50% { transform: rotate(-52deg); }
 }
-.dsh-cat--poop-done .wc-head { animation: dsh-cat-sniff 1.1s ease-in-out; }
+.dsh-cat--poop-done .wc-head { animation: dsh-cat-poop-sniff 1.15s ease-in-out 2; }
+@keyframes dsh-cat-poop-sniff {
+  0%, 100% { transform: rotate(42deg) translateY(2px); }
+  25% { transform: rotate(56deg) translateY(5px); }
+  50% { transform: rotate(44deg) translateY(2px); }
+  75% { transform: rotate(53deg) translateY(4px); }
+}
