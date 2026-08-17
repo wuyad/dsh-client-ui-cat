@@ -492,6 +492,18 @@ window.__ModuleLoader__.load({
   25% { opacity: 0.9; }
   100% { opacity: 0; transform: translateY(-26px) scale(1.15); }
 }
+/* teleport: vanish in a puff, reappear elsewhere */
+.dsh-cat--teleport .dsh-cat-inner { animation: dsh-cat-teleport-out 0.32s ease-in forwards; }
+.dsh-cat--teleport-arrive .dsh-cat-inner { animation: dsh-cat-teleport-in 0.36s ease-out backwards; }
+@keyframes dsh-cat-teleport-out {
+  0% { transform: scale(1) rotate(0deg); opacity: 1; }
+  100% { transform: scale(0.15) rotate(200deg); opacity: 0; }
+}
+@keyframes dsh-cat-teleport-in {
+  0% { transform: scale(0.15) rotate(-200deg); opacity: 0; }
+  60% { transform: scale(1.12) rotate(10deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
 `;
 		// Visual cat size (the asset's 60x42 canvas).
 		const CAT_W = 60;
@@ -567,7 +579,7 @@ window.__ModuleLoader__.load({
 			let tx = 60;
 			let ty = 70;
 			let speed = 70;
-			let state = "idle"; // idle | edge | ground | hop | cliff | fall | hurt | recover | nap | pet
+			let state = "idle"; // idle | edge | ground | hop | cliff | fall | hurt | recover | nap | pet | teleport
 			let ledge = null;   // current ledge {y, x1, x2}
 			let onLedge = false;
 			let edges = [];     // [{y, x1, x2}]
@@ -604,6 +616,7 @@ window.__ModuleLoader__.load({
 			let jumpLedge = null;
 			let grooming = false;
 			let groomTimer = 0;
+			let teleportTimer = 0;
 			let idleSince = 0;
 			let dragging = false;
 			let dragMoved = false;
@@ -660,7 +673,8 @@ window.__ModuleLoader__.load({
 				"dsh-cat--idle", "dsh-cat--walk", "dsh-cat--hop", "dsh-cat--fall",
 				"dsh-cat--hurt", "dsh-cat--recover", "dsh-cat--petted", "dsh-cat--nap",
 				"dsh-cat--drag", "dsh-cat--groom", "dsh-cat--groom-scratch", "dsh-cat--groom-lick",
-				"dsh-cat--cliff", "dsh-cat--sniff", "dsh-cat--run", "dsh-cat--jump"
+				"dsh-cat--cliff", "dsh-cat--sniff", "dsh-cat--run", "dsh-cat--jump",
+				"dsh-cat--teleport", "dsh-cat--teleport-arrive"
 			];
 			function setMode(stateName) {
 				for (const c of STATE_CLASSES) root.classList.remove(c);
@@ -681,6 +695,7 @@ window.__ModuleLoader__.load({
 				else if (stateName === "jump") root.classList.add("dsh-cat--jump");
 				else if (stateName === "drag") root.classList.add("dsh-cat--drag");
 				else if (stateName === "pet") root.classList.add("dsh-cat--petted");
+				else if (stateName === "teleport") root.classList.add("dsh-cat--teleport");
 			}
 			const paint = () => {
 				root.style.transform = "translate3d(" + x + "px," + y + "px,0)";
@@ -764,6 +779,69 @@ window.__ModuleLoader__.load({
 				speed = 34 + Math.random() * 26;
 				root.style.setProperty("--dsh-step", clamp(32 / speed, 0.5, 1.0).toFixed(3) + "s");
 				if (Math.random() < 0.18) startRun();
+			}
+			function pickTeleportSpot(maxX, maxY) {
+				scanEdgesIfStale(true);
+				// prefer landing on an existing ledge so the cat stands on something
+				const usable = edges.filter(
+					(e) => e.y > CAT_H + 10 && e.y < vh() - 20 && e.x2 - e.x1 >= CAT_W
+				);
+				if (usable.length && Math.random() < 0.7) {
+					const e = usable[Math.floor(Math.random() * usable.length)];
+					const ex = clamp(rand(e.x1, Math.max(e.x1 + 1, e.x2 - CAT_W)), MARGIN, maxX);
+					return { x: ex, y: e.y - CAT_H };
+				}
+				// otherwise anywhere in the viewport — not just the bottom
+				return {
+					x: rand(MARGIN, maxX),
+					y: rand(MARGIN + 30, maxY),
+				};
+			}
+			function startTeleport() {
+				state = "teleport";
+				setMode("teleport");
+				root.classList.remove("dsh-cat--teleport-arrive");
+				void root.offsetWidth; // restart vanish animation
+				root.classList.add("dsh-cat--teleport");
+				puffDust();
+				const maxX = Math.max(MARGIN + 1, vw() - CAT_W - MARGIN);
+				const maxY = Math.max(MARGIN + 30, vh() - CAT_H - MARGIN);
+				const spot = pickTeleportSpot(maxX, maxY);
+				if (reduced) {
+					// jump instantly, no animation
+					x = spot.x;
+					y = spot.y;
+					tx = x;
+					ty = y;
+					ledge = null;
+					onLedge = false;
+					paint();
+					root.classList.remove("dsh-cat--teleport");
+					state = "idle";
+					setMode("idle");
+					restUntil = performance.now() + rand(1200, 2600);
+					return;
+				}
+				clearTimeout(teleportTimer);
+				teleportTimer = setTimeout(() => {
+					x = spot.x;
+					y = spot.y;
+					tx = x;
+					ty = y;
+					ledge = null;
+					onLedge = false;
+					paint();
+					root.classList.remove("dsh-cat--teleport");
+					void root.offsetWidth;
+					root.classList.add("dsh-cat--teleport-arrive");
+					puffDust();
+					teleportTimer = setTimeout(() => {
+						root.classList.remove("dsh-cat--teleport-arrive");
+						state = "idle";
+						setMode("idle");
+						restUntil = performance.now() + rand(1200, 2600);
+					}, 380);
+				}, 340);
 			}
 			function startFall() {
 				state = "fall";
@@ -970,6 +1048,11 @@ window.__ModuleLoader__.load({
 			function decideNext(now) {
 				maybeMeow();
 				scanEdgesIfStale(true);
+				// occasionally teleport somewhere else so it doesn't linger at the bottom
+				if (!mustMove && Math.random() < 0.12) {
+					startTeleport();
+					return;
+				}
 				// mostly the cat lies down and sleeps where it is
 				if (mustMove) {
 					mustMove = false;
@@ -1189,6 +1272,8 @@ window.__ModuleLoader__.load({
 				clearTimeout(petTimer);
 				clearTimeout(napTimer);
 				clearTimeout(sniffTimer);
+				clearTimeout(teleportTimer);
+				root.classList.remove("dsh-cat--teleport", "dsh-cat--teleport-arrive");
 				dragging = true;
 				dragMoved = false;
 				pointerId = e.pointerId;
@@ -1262,6 +1347,7 @@ window.__ModuleLoader__.load({
 				clearTimeout(napTimer);
 				clearTimeout(groomTimer);
 				clearTimeout(sniffTimer);
+				clearTimeout(teleportTimer);
 				window.removeEventListener("resize", onResize);
 				window.removeEventListener("scroll", onScroll, true);
 				root.remove();

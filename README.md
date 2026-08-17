@@ -8,6 +8,7 @@ A little tabby cat that wanders around the **DeepSeek Harness** web UI — walki
 
 - 🐾 Walks along the top edges of page elements (paragraphs, headings, cards, buttons, …)
 - 🪜 Hops up onto ledges, runs, sniffs, grooms, and **naps most of the time** (12–24s, ~75% of rests)
+- ✨ Occasionally **teleports** to a random spot on the page (with a vanish/appear puff) so it doesn't stay at the bottom
 - 🏔️ Sometimes reaches the end of a ledge and falls off — gets dizzy, sees stars, grows a bump, then recovers on its own
 - ❤️ Click to pet it: pink hearts, purring, and instant recovery after a fall
 - 🎨 Right-click to cycle through **6 walking skins** (orange / white / tuxedo / black / gray / siamese)
