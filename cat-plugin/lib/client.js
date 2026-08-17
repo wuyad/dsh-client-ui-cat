@@ -1145,8 +1145,8 @@ window.__ModuleLoader__.load({
 				const rect = root.getBoundingClientRect();
 				const facingLeft = root.classList.contains("dsh-cat--face-left");
 				const rearX = facingLeft
-					? rect.right - rand(16, 26)
-					: rect.left + rand(16, 26);
+					? rect.right - rand(4, 14)
+					: rect.left + rand(4, 14);
 				el.style.left = rearX + "px";
 				el.style.top = (rect.bottom - 3) + "px";
 				document.body.appendChild(el);
