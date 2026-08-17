@@ -669,6 +669,7 @@ window.__ModuleLoader__.load({
 			let backX1 = 0;
 			let poopTimer = 0;
 			let lastTeleportCheck = performance.now() + rand(12000, 22000);
+			let lastPoopCheck = performance.now() + rand(15000, 30000);
 			let idleSince = 0;
 			let dragging = false;
 			let dragMoved = false;
@@ -1206,6 +1207,16 @@ window.__ModuleLoader__.load({
 					} else {
 						// not a good moment (napping/walking/etc.) — retry soon
 						lastTeleportCheck = now + 6000;
+					}
+				}
+				// time-driven poop: also independent of the decision chain
+				// (~every 25-60s when idle)
+				if (now >= lastPoopCheck) {
+					if (state === "idle" && !dragging && !grooming && !reduced) {
+						startPoop();
+						lastPoopCheck = now + rand(25000, 60000);
+					} else {
+						lastPoopCheck = now + 6000;
 					}
 				}
 				switch (state) {
