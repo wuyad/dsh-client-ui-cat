@@ -339,6 +339,8 @@ window.__ModuleLoader__.load({
   opacity: 1;
   animation: dsh-cat-bump-pulse 0.45s ease-in-out infinite alternate;
 }
+/* keep the red bump on the head when the cat faces left */
+.dsh-cat--face-left .dsh-cat-bump { left: 4px; }
 @keyframes dsh-cat-bump-pulse {
   from { transform: scale(1); }
   to { transform: scale(1.12); }
@@ -557,28 +559,29 @@ window.__ModuleLoader__.load({
   0% { opacity: 1; transform: scale(1); }
   100% { opacity: 0; transform: scale(0.2) rotate(30deg); }
 }
-/* after pooping: proud tail flicks, look back, then sniff — one ceremony */
-.dsh-cat--poop-done .dsh-cat-inner { animation: dsh-cat-poop-ceremony 3.6s ease-in-out forwards; }
-@keyframes dsh-cat-poop-ceremony {
-  0% { transform: translateY(1px) rotate(0deg); }
-  12% { transform: translateY(1px) rotate(12deg); }
-  24% { transform: translateY(1px) rotate(0deg); }
-  100% { transform: translateY(1px) rotate(0deg); }
-}
+/* after pooping: pause, turn the whole body around, then sniff */
+.dsh-cat--poop-done .dsh-cat-inner { transform: translateY(1px); }
 .dsh-cat--poop-done .wc-tail { animation: dsh-cat-tail-flick 0.42s ease-in-out infinite; }
 @keyframes dsh-cat-tail-flick {
   0%, 100% { transform: rotate(-8deg); }
   50% { transform: rotate(-52deg); }
 }
-.dsh-cat--poop-done .wc-head { animation: dsh-cat-poop-look-sniff 3.6s ease-in-out forwards; }
-@keyframes dsh-cat-poop-look-sniff {
-  0% { transform: rotate(42deg) translateY(2px); }
-  15% { transform: rotate(-46deg) translateY(4px); }
-  28% { transform: rotate(42deg) translateY(2px); }
-  44% { transform: rotate(57deg) translateY(5px); }
-  58% { transform: rotate(44deg) translateY(2px); }
-  72% { transform: rotate(53deg) translateY(4px); }
-  100% { transform: rotate(42deg) translateY(2px); }
+/* turn the whole body around (nested flip: mirrors whichever way it faced) */
+.dsh-cat--poop-turn .dsh-cat-inner { animation: dsh-cat-poop-flip 1s ease-in-out forwards; }
+@keyframes dsh-cat-poop-flip {
+  0% { transform: translateY(1px) scaleX(1); }
+  50% { transform: translateY(1px) scaleX(0.06); }
+  100% { transform: translateY(1px) scaleX(-1); }
+}
+/* after turning: stay turned and sniff once */
+.dsh-cat--poop-sniff .dsh-cat-inner { transform: translateY(1px) scaleX(-1); }
+.dsh-cat--poop-sniff .wc-head { animation: dsh-cat-poop-sniff 2s ease-in-out; }
+@keyframes dsh-cat-poop-sniff {
+  0%, 100% { transform: rotate(42deg) translateY(2px); }
+  25% { transform: rotate(60deg) translateY(5px); }
+  45% { transform: rotate(46deg) translateY(2px); }
+  65% { transform: rotate(58deg) translateY(5px); }
+  85% { transform: rotate(46deg) translateY(2px); }
 }
 `;
 		// Visual cat size (the asset's 60x42 canvas).
@@ -588,6 +591,10 @@ window.__ModuleLoader__.load({
 		const MIN_LEDGE = 90; // shortest walkable top-edge (px)
 		const HOP_MAX = 90;   // highest ledge the cat can hop onto (px)
 		const FALL_G = 800;   // px/s^2 fall gravity
+		// DEBUG ONLY: poop every ~10s for tuning. Set to true to enable the
+		// debug cadence (also disables napping); leave false for the normal
+		// 25-60s random cadence with cooldown.
+		const DEBUG_POOP_EVERY_10S = false;
 		const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);
 		const rand = (lo, hi) => lo + Math.random() * (hi - lo);
 
@@ -698,7 +705,9 @@ window.__ModuleLoader__.load({
 			let poopTimer = 0;
 			let poopCooldownUntil = 0; // don't poop again too soon
 			let lastTeleportCheck = performance.now() + rand(12000, 22000);
-			let lastPoopCheck = performance.now() + rand(15000, 30000);
+			let lastPoopCheck = DEBUG_POOP_EVERY_10S
+				? performance.now() + 3000
+				: performance.now() + rand(15000, 30000);
 			let idleSince = 0;
 			let dragging = false;
 			let dragMoved = false;
@@ -756,7 +765,8 @@ window.__ModuleLoader__.load({
 				"dsh-cat--hurt", "dsh-cat--recover", "dsh-cat--petted", "dsh-cat--nap",
 				"dsh-cat--drag", "dsh-cat--groom", "dsh-cat--groom-scratch", "dsh-cat--groom-lick",
 				"dsh-cat--cliff", "dsh-cat--sniff", "dsh-cat--run", "dsh-cat--jump",
-				"dsh-cat--teleport", "dsh-cat--teleport-arrive", "dsh-cat--poop-done"
+				"dsh-cat--teleport", "dsh-cat--teleport-arrive", "dsh-cat--poop-done",
+				"dsh-cat--poop-turn", "dsh-cat--poop-sniff"
 			];
 			function setMode(stateName) {
 				for (const c of STATE_CLASSES) root.classList.remove(c);
@@ -790,6 +800,9 @@ window.__ModuleLoader__.load({
 				bubbleTimer = setTimeout(() => bubble.classList.remove("dsh-cat-bubble--show"), ms || 2200);
 			}
 			function showFx() {
+				// anchor the "!" above the head: the cat flips via .dsh-cat-flip
+				// but this element is a root child, so mirror it manually
+				fx.style.left = root.classList.contains("dsh-cat--face-left") ? "5px" : "39px";
 				fx.classList.remove("dsh-cat-fx--show");
 				void fx.offsetWidth; // restart animation
 				fx.classList.add("dsh-cat-fx--show");
@@ -1137,7 +1150,7 @@ window.__ModuleLoader__.load({
 				}, rand(12000, 24000));
 			}
 			function startPoop() {
-				if (performance.now() < poopCooldownUntil) return; // still cooling down
+				if (!DEBUG_POOP_EVERY_10S && performance.now() < poopCooldownUntil) return; // still cooling down
 				// squat (nap pose) and strain for a while, then drop a poop that stays until clicked
 				state = "poop";
 				setMode("nap");
@@ -1146,15 +1159,24 @@ window.__ModuleLoader__.load({
 				poopTimer = setTimeout(() => {
 					showBubble("💩", 1200);
 					leavePoop();
-					// look back, then sniff — one continuous ceremony (CSS, 3.6s)
+					// pause 1s → turn the whole body around → sniff once
 					state = "poop-done";
 					setMode("poop-done");
 					poopTimer = setTimeout(() => {
-						state = "idle";
-						setMode("idle");
-						restUntil = performance.now() + rand(1200, 2400);
-						poopCooldownUntil = performance.now() + rand(30000, 50000);
-					}, 3700);
+						root.classList.remove("dsh-cat--poop-done");
+						root.classList.add("dsh-cat--poop-turn");
+						poopTimer = setTimeout(() => {
+							root.classList.remove("dsh-cat--poop-turn");
+							root.classList.add("dsh-cat--poop-sniff");
+							poopTimer = setTimeout(() => {
+								root.classList.remove("dsh-cat--poop-sniff");
+								state = "idle";
+								setMode("idle");
+								restUntil = performance.now() + rand(1200, 2400);
+								poopCooldownUntil = performance.now() + rand(30000, 50000);
+							}, 2100);
+						}, 1050);
+					}, 1000);
 				}, rand(3400, 4600));
 			}
 			function leavePoop() {
@@ -1167,8 +1189,8 @@ window.__ModuleLoader__.load({
 				const rect = root.getBoundingClientRect();
 				const facingLeft = root.classList.contains("dsh-cat--face-left");
 				const rearX = facingLeft
-					? rect.right - 10
-					: rect.left + 10;
+					? rect.right - 12
+					: rect.left + 4;
 				el.style.left = rearX + "px";
 				el.style.top = (rect.bottom - 8) + "px";
 				document.body.appendChild(el);
@@ -1205,7 +1227,9 @@ window.__ModuleLoader__.load({
 				maybeMeow();
 				scanEdgesIfStale(true);
 				// occasionally poop where it stands (left behind until clicked)
-				if (!mustMove && Math.random() < 0.14) {
+				// (disabled in DEBUG_POOP_EVERY_10S — the time-driven check
+				// fires on a fixed 10s cadence instead)
+				if (!DEBUG_POOP_EVERY_10S && !mustMove && Math.random() < 0.14) {
 					startPoop();
 					return;
 				}
@@ -1215,9 +1239,10 @@ window.__ModuleLoader__.load({
 					return;
 				}
 				// mostly the cat lies down and sleeps where it is
+				// (DEBUG_POOP_EVERY_10S: no napping — keep it active for tuning)
 				if (mustMove) {
 					mustMove = false;
-				} else if (Math.random() < 0.75) {
+				} else if (!DEBUG_POOP_EVERY_10S && Math.random() < 0.75) {
 					startNap();
 					return;
 				}
@@ -1255,13 +1280,24 @@ window.__ModuleLoader__.load({
 					}
 				}
 				// time-driven poop: also independent of the decision chain
-				// (~every 25-60s when idle)
+				// (~every 25-60s when idle; ~10s in DEBUG_POOP_EVERY_10S)
 				if (now >= lastPoopCheck) {
-					if (state === "idle" && !dragging && !grooming && !reduced) {
+					const poopReady = DEBUG_POOP_EVERY_10S
+						// debug: only fire while the cat is idle (stopped), so it
+						// can still walk forward and turn around — the ~2s retry
+						// loop catches the next idle moment for a ~10s cadence
+						? (state === "idle" && !dragging && !grooming)
+						// normal: only while idling
+						: (state === "idle" && !dragging && !grooming && !reduced);
+					if (poopReady) {
 						startPoop();
-						lastPoopCheck = now + rand(25000, 60000);
+						lastPoopCheck = DEBUG_POOP_EVERY_10S
+							? now + 10000
+							: now + rand(25000, 60000);
 					} else {
-						lastPoopCheck = now + 6000;
+						lastPoopCheck = DEBUG_POOP_EVERY_10S
+							? now + 2000 // retry soon to catch the next idle stop
+							: now + 6000;
 					}
 				}
 				switch (state) {
@@ -1555,7 +1591,10 @@ window.__ModuleLoader__.load({
 			setMode("idle");
 			scanEdges();
 			paint();
-			if (!reduced) raf = requestAnimationFrame(step);
+			// DEBUG_POOP_EVERY_10S: force the main loop on even under
+			// prefers-reduced-motion, otherwise the time-driven poop check
+			// never runs and the debug cadence never fires.
+			if (!reduced || DEBUG_POOP_EVERY_10S) raf = requestAnimationFrame(step);
 
 			return () => {
 				cancelAnimationFrame(raf);

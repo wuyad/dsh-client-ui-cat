@@ -326,6 +326,8 @@
   opacity: 1;
   animation: dsh-cat-bump-pulse 0.45s ease-in-out infinite alternate;
 }
+/* keep the red bump on the head when the cat faces left */
+.dsh-cat--face-left .dsh-cat-bump { left: 4px; }
 @keyframes dsh-cat-bump-pulse {
   from { transform: scale(1); }
   to { transform: scale(1.12); }
@@ -544,26 +546,27 @@
   0% { opacity: 1; transform: scale(1); }
   100% { opacity: 0; transform: scale(0.2) rotate(30deg); }
 }
-/* after pooping: proud tail flicks, look back, then sniff — one ceremony */
-.dsh-cat--poop-done .dsh-cat-inner { animation: dsh-cat-poop-ceremony 3.6s ease-in-out forwards; }
-@keyframes dsh-cat-poop-ceremony {
-  0% { transform: translateY(1px) rotate(0deg); }
-  12% { transform: translateY(1px) rotate(12deg); }
-  24% { transform: translateY(1px) rotate(0deg); }
-  100% { transform: translateY(1px) rotate(0deg); }
-}
+/* after pooping: pause, turn the whole body around, then sniff */
+.dsh-cat--poop-done .dsh-cat-inner { transform: translateY(1px); }
 .dsh-cat--poop-done .wc-tail { animation: dsh-cat-tail-flick 0.42s ease-in-out infinite; }
 @keyframes dsh-cat-tail-flick {
   0%, 100% { transform: rotate(-8deg); }
   50% { transform: rotate(-52deg); }
 }
-.dsh-cat--poop-done .wc-head { animation: dsh-cat-poop-look-sniff 3.6s ease-in-out forwards; }
-@keyframes dsh-cat-poop-look-sniff {
-  0% { transform: rotate(42deg) translateY(2px); }
-  15% { transform: rotate(-46deg) translateY(4px); }
-  28% { transform: rotate(42deg) translateY(2px); }
-  44% { transform: rotate(57deg) translateY(5px); }
-  58% { transform: rotate(44deg) translateY(2px); }
-  72% { transform: rotate(53deg) translateY(4px); }
-  100% { transform: rotate(42deg) translateY(2px); }
+/* turn the whole body around (nested flip: mirrors whichever way it faced) */
+.dsh-cat--poop-turn .dsh-cat-inner { animation: dsh-cat-poop-flip 1s ease-in-out forwards; }
+@keyframes dsh-cat-poop-flip {
+  0% { transform: translateY(1px) scaleX(1); }
+  50% { transform: translateY(1px) scaleX(0.06); }
+  100% { transform: translateY(1px) scaleX(-1); }
+}
+/* after turning: stay turned and sniff once */
+.dsh-cat--poop-sniff .dsh-cat-inner { transform: translateY(1px) scaleX(-1); }
+.dsh-cat--poop-sniff .wc-head { animation: dsh-cat-poop-sniff 2s ease-in-out; }
+@keyframes dsh-cat-poop-sniff {
+  0%, 100% { transform: rotate(42deg) translateY(2px); }
+  25% { transform: rotate(60deg) translateY(5px); }
+  45% { transform: rotate(46deg) translateY(2px); }
+  65% { transform: rotate(58deg) translateY(5px); }
+  85% { transform: rotate(46deg) translateY(2px); }
 }
