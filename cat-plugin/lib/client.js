@@ -539,7 +539,8 @@ window.__ModuleLoader__.load({
   width: 13px; height: 11px;
   z-index: 2147483000;
   pointer-events: auto;
-  cursor: pointer;
+  /* little shovel cursor when hovering a poop */
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cline x1='24' y1='5' x2='13' y2='16' stroke='%238a5a2a' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M11 14 L7 21 Q6 27 13 28 L21 28 Q25 27 23 21 L19 14 Z' fill='%23c89060' stroke='%236b4220' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E") 8 27, pointer;
   opacity: 0;
 }
 .dsh-cat-poop svg {
@@ -566,13 +567,8 @@ window.__ModuleLoader__.load({
   0%, 100% { transform: rotate(-8deg); }
   50% { transform: rotate(-52deg); }
 }
-/* turn the whole body around (nested flip: mirrors whichever way it faced) */
-.dsh-cat--poop-turn .dsh-cat-inner { animation: dsh-cat-poop-flip 1s ease-in-out forwards; }
-@keyframes dsh-cat-poop-flip {
-  0% { transform: translateY(1px) scaleX(1); }
-  50% { transform: translateY(1px) scaleX(0.06); }
-  100% { transform: translateY(1px) scaleX(-1); }
-}
+/* turn the whole body around instantly (no animation) */
+.dsh-cat--poop-turn .dsh-cat-inner { transform: translateY(1px) scaleX(-1); }
 /* after turning: stay turned and sniff once */
 .dsh-cat--poop-sniff .dsh-cat-inner { transform: translateY(1px) scaleX(-1); }
 .dsh-cat--poop-sniff .wc-head { animation: dsh-cat-poop-sniff 2s ease-in-out; }
@@ -1149,6 +1145,30 @@ window.__ModuleLoader__.load({
 					}
 				}, rand(12000, 24000));
 			}
+			function walkPoopSteps(dist, done) {
+				// walk `dist` px at the normal walking pace, smoothly animated
+				// (same speed/step cadence as startGroundWalk)
+				root.classList.add("dsh-cat--walk");
+				const speed = 34 + Math.random() * 26;
+				const stepDur = clamp(32 / speed, 0.5, 1.0);
+				root.style.setProperty("--dsh-step", stepDur.toFixed(3) + "s");
+				const x0 = x;
+				const dur = (Math.abs(dist) / speed) * 1000; // ms at walk speed
+				const t0 = performance.now();
+				clearTimeout(poopTimer);
+				const frame = () => {
+					const t = Math.min((performance.now() - t0) / dur, 1);
+					x = x0 + dist * t;
+					paint();
+					if (t < 1) {
+						poopTimer = setTimeout(frame, 16);
+					} else {
+						root.classList.remove("dsh-cat--walk");
+						done();
+					}
+				};
+				poopTimer = setTimeout(frame, 16);
+			}
 			function startPoop() {
 				if (!DEBUG_POOP_EVERY_10S && performance.now() < poopCooldownUntil) return; // still cooling down
 				// squat (nap pose) and strain for a while, then drop a poop that stays until clicked
@@ -1159,23 +1179,30 @@ window.__ModuleLoader__.load({
 				poopTimer = setTimeout(() => {
 					showBubble("💩", 1200);
 					leavePoop();
-					// pause 1s → turn the whole body around → sniff once
+					// pause 1s → walk forward 4 steps → turn around → walk
+					// forward 4 steps → sniff once → sprint off
 					state = "poop-done";
 					setMode("poop-done");
 					poopTimer = setTimeout(() => {
 						root.classList.remove("dsh-cat--poop-done");
-						root.classList.add("dsh-cat--poop-turn");
-						poopTimer = setTimeout(() => {
-							root.classList.remove("dsh-cat--poop-turn");
-							root.classList.add("dsh-cat--poop-sniff");
-							poopTimer = setTimeout(() => {
-								root.classList.remove("dsh-cat--poop-sniff");
-								state = "idle";
-								setMode("idle");
-								restUntil = performance.now() + rand(1200, 2400);
-								poopCooldownUntil = performance.now() + rand(30000, 50000);
-							}, 2100);
-						}, 1050);
+						const facing = root.classList.contains("dsh-cat--face-left") ? -1 : 1;
+						walkPoopSteps(facing * 40, () => {
+							// instant turn-around
+							root.classList.add("dsh-cat--poop-turn");
+							walkPoopSteps(-facing * 40, () => {
+								root.classList.remove("dsh-cat--poop-turn");
+								root.classList.add("dsh-cat--poop-sniff");
+								poopTimer = setTimeout(() => {
+									root.classList.remove("dsh-cat--poop-sniff");
+									// sprint off right after finishing
+									onLedge = false;
+									const f = root.classList.contains("dsh-cat--face-left") ? -1 : 1;
+									tx = clamp(x + (-f) * rand(180, 300), MARGIN, Math.max(MARGIN, vw() - CAT_W - MARGIN));
+									ty = y;
+									startRun();
+								}, 2100);
+							});
+						});
 					}, 1000);
 				}, rand(3400, 4600));
 			}

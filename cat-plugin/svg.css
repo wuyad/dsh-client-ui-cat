@@ -526,7 +526,8 @@
   width: 13px; height: 11px;
   z-index: 2147483000;
   pointer-events: auto;
-  cursor: pointer;
+  /* little shovel cursor when hovering a poop */
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cline x1='24' y1='5' x2='13' y2='16' stroke='%238a5a2a' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M11 14 L7 21 Q6 27 13 28 L21 28 Q25 27 23 21 L19 14 Z' fill='%23c89060' stroke='%236b4220' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E") 8 27, pointer;
   opacity: 0;
 }
 .dsh-cat-poop svg {
@@ -553,13 +554,8 @@
   0%, 100% { transform: rotate(-8deg); }
   50% { transform: rotate(-52deg); }
 }
-/* turn the whole body around (nested flip: mirrors whichever way it faced) */
-.dsh-cat--poop-turn .dsh-cat-inner { animation: dsh-cat-poop-flip 1s ease-in-out forwards; }
-@keyframes dsh-cat-poop-flip {
-  0% { transform: translateY(1px) scaleX(1); }
-  50% { transform: translateY(1px) scaleX(0.06); }
-  100% { transform: translateY(1px) scaleX(-1); }
-}
+/* turn the whole body around instantly (no animation) */
+.dsh-cat--poop-turn .dsh-cat-inner { transform: translateY(1px) scaleX(-1); }
 /* after turning: stay turned and sniff once */
 .dsh-cat--poop-sniff .dsh-cat-inner { transform: translateY(1px) scaleX(-1); }
 .dsh-cat--poop-sniff .wc-head { animation: dsh-cat-poop-sniff 2s ease-in-out; }
