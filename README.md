@@ -20,27 +20,23 @@ A little tabby cat that wanders around the **DeepSeek Harness** web UI — walki
 
 ## Installation
 
-Published on **npm**: [`dsh-client-ui-cat`](https://www.npmjs.com/package/dsh-client-ui-cat). One command installs it into your DeepSeek Harness profile:
+Published on **npm**: [`dsh-client-ui-cat`](https://www.npmjs.com/package/dsh-client-ui-cat). One command installs **and activates** it — the package declares `dsh.bundle`, so `dsh plugin` registers the loader entry for you:
 
 ```bash
 dsh plugin --profile web add dsh-client-ui-cat
 ```
 
-Then add a loader entry to the profile's `cordis.patch.yml` (create the file if missing):
+Restart the harness and refresh the page — the cat appears at the bottom of the page and starts exploring.
+
+### Manual (from this repo)
+
+Copy the `cat-plugin/` folder into your profile's `web/node_modules` as `dsh-client-ui-cat`, then add a loader entry to the profile's `cordis.patch.yml` (create the file if missing):
 
 ```yaml
 - insert:
     - id: ui-cat
       name: 'dsh-client-ui-cat'
 ```
-
-Restart the harness and refresh the page — the cat appears at the bottom of the page and starts exploring.
-
-> **No build, no copy-paste.** The package declares `dsh.client`, so the client-modules half picks it up automatically at boot. If you don't use `dsh plugin`, `npm install dsh-client-ui-cat` inside the profile directory works too.
-
-### Manual (from this repo)
-
-Copy the `cat-plugin/` folder into your profile's `web/node_modules` as `dsh-client-ui-cat`, then register it in `cordis.patch.yml` as shown above.
 
 ## Usage
 

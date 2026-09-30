@@ -13,6 +13,7 @@
   "files": [
     "lib",
     "cat.svg",
+    "cordis.patch.yml",
     "README.md",
     "README.zh-CN.md"
   ],
@@ -35,6 +36,9 @@
     "pet"
   ],
   "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
     "client": {
       "platform": "web",
       "immediately": true
