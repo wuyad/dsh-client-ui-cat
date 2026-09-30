@@ -46,7 +46,7 @@ Copy the `cat-plugin/` folder into your profile's `web/node_modules` as `dsh-cli
 | Drag | Pick the cat up, then release to drop it |
 | Right-click | Cycle to the next skin (橘猫 / 白猫 / 奶牛猫 / 黑猫 / 灰猫 / 暹罗猫) |
 | Click a poop | Remove it (otherwise it stays until the page reloads) |
-| Double-click a poop | Clear every poop on the page |
+| Right-click a poop | Clear every poop on the page |
 
 ## Development
 

@@ -1233,8 +1233,8 @@ window.__ModuleLoader__.load({
 					ev.preventDefault();
 					squishAway(el);
 				});
-				// double-click any poop to clear every poop on the page
-				el.addEventListener("dblclick", (ev) => {
+				// right-click any poop to clear every poop on the page
+				el.addEventListener("contextmenu", (ev) => {
 					ev.stopPropagation();
 					ev.preventDefault();
 					for (const p of document.querySelectorAll(".dsh-cat-poop")) squishAway(p);
