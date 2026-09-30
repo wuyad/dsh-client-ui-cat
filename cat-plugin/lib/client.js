@@ -1223,12 +1223,21 @@ window.__ModuleLoader__.load({
 				document.body.appendChild(el);
 				void el.offsetWidth;
 				el.classList.add("dsh-cat-poop--show");
+				const squishAway = (node) => {
+					node.classList.remove("dsh-cat-poop--show");
+					node.classList.add("dsh-cat-poop--squish");
+					setTimeout(() => node.remove(), 300);
+				};
 				el.addEventListener("click", (ev) => {
 					ev.stopPropagation();
 					ev.preventDefault();
-					el.classList.remove("dsh-cat-poop--show");
-					el.classList.add("dsh-cat-poop--squish");
-					setTimeout(() => el.remove(), 300);
+					squishAway(el);
+				});
+				// double-click any poop to clear every poop on the page
+				el.addEventListener("dblclick", (ev) => {
+					ev.stopPropagation();
+					ev.preventDefault();
+					for (const p of document.querySelectorAll(".dsh-cat-poop")) squishAway(p);
 				});
 			}
 			function startPet() {
